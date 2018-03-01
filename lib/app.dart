@@ -2,8 +2,33 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'home.dart';
 
-class MyApp extends StatelessWidget {
+class MyAppHandler extends StatefulWidget {
   // This widget is the root of your application.
+
+  @override
+  _MyAppHandlerState createState() => new _MyAppHandlerState();
+}
+
+class _MyAppHandlerState extends State<MyAppHandler> {
+  bool _isLoggedIn = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      child: (_isLoggedIn
+            ? new HomePage()
+            : new LoginPage(
+              onLoggedIn: (isLoggedIn) {
+                setState(() {
+                  _isLoggedIn = isLoggedIn;
+                });
+              }
+            )),
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -19,10 +44,7 @@ class MyApp extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
-      routes: <String,WidgetBuilder>{
-        '/': (BuildContext context) => new LoginPage(),
-        '/home': (BuildContext context) => new HomePage(),
-      },
+      home: new MyAppHandler(),
     );
   }
 }

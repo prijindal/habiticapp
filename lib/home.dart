@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key key}) : super(key: key);
-
   final String title = "Home Page";
 
   @override
