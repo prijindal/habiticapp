@@ -9,6 +9,7 @@ class HomePage extends StatelessWidget {
     Widget build(BuildContext context) {
       return new Scaffold(
         appBar: new AppBar(
+          elevation: 4.0,
           title: new Text(this.title),
           actions: <Widget>[
             new IconButton(

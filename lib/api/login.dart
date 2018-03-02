@@ -7,7 +7,6 @@ import 'login.class.dart';
 login(String username, String password) async {
   var url = "https://habitica.com/api/v3/user/auth/local/login";
   var httpClient = new http.Client();
-  String result;
   var request = new http.Request('POST', Uri.parse(url));
   var body = {'username': username, 'password': password};
   request.bodyFields = body;

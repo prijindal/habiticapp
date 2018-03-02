@@ -10,6 +10,7 @@ dependencies:
   cupertino_icons: ^0.1.0
   shared_preferences: "^0.3.0"
   redux: ">=2.0.0 <3.0.0"
+  flutter_redux: "^0.3.0"
 
 dev_dependencies:
   flutter_test:
