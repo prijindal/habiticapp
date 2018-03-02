@@ -1,13 +1,13 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'api/login.dart';
+import 'api/login.class.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({ Key key, this.onLoggedIn }): super(key: key);
   final String title = "Login Page";
-  final ValueChanged<bool> onLoggedIn;
+  final ValueChanged<LoginResponse> onLoggedIn;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -20,33 +20,22 @@ class _LoginPageState extends State<LoginPage> {
   String _error = "";
 
   _loginHabitica() async {
-    var url = "https://habitica.com/api/v3/user/auth/local/login";
-    var httpClient = new http.Client();
-    String result;
     try {
-      var request = new http.Request('POST', Uri.parse(url));
-      var body = {'username':_emailcontroller.text, 'password':_passwordcontroller.text};
-      request.bodyFields = body;
-      var responseStream = await httpClient.send(request);
-      var response = await responseStream.stream.bytesToString();
-      var json = response.toString();
-      var responseJson = JSON.decode(json);
-      if (!mounted) return;
-      if (responseStream.statusCode == HttpStatus.OK) {
-        var data = responseJson['data'];              
-        result = data['id'];
-        setState(() {
-          _error = "";
-        });
-        widget.onLoggedIn(true);
-      } else {
-        setState(() {
-          _error = responseJson['error'];
-        });
-      }
-    } catch(Exception) {
+      LoginResponse data = await login(_emailcontroller.text, _passwordcontroller.text);
+      if (!mounted) return;  
+      // var result = data['id'];
       setState(() {
-        _error = "Unexpected Error Occured";
+        _error = "";
+      });
+      print(data);
+      widget.onLoggedIn(data);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('id', data.id);
+      prefs.setString('apiToken', data.apiToken);
+    } catch(e) {
+      print(e.toString());
+      setState(() {
+        _error = e.toString();
       });
     }
   }
@@ -94,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     title: new TextFormField(
                       controller: _emailcontroller,
                       keyboardType: TextInputType.emailAddress,
+                      initialValue: "priyanshujindal1995@gmail.com",
                       decoration: new InputDecoration(
                         icon: const Icon(Icons.person),
                         hintText: "Username"
@@ -105,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordcontroller,
                       keyboardType: TextInputType.text,
                       obscureText: true,
+                      initialValue: "Priyanshu@95",
                       decoration: new InputDecoration(
                         icon: const Icon(Icons.person),
                         hintText: "Password"
@@ -124,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             new Text(
-              _error.isEmpty ? '$_error' : null,
+              _error.isNotEmpty ? '$_error' : "",
               style: Theme.of(context).textTheme.display1,
             ),
           ],

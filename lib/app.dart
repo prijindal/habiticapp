@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'api/login.class.dart';
 
 class MyAppHandler extends StatefulWidget {
   // This widget is the root of your application.
@@ -10,20 +13,71 @@ class MyAppHandler extends StatefulWidget {
 }
 
 class _MyAppHandlerState extends State<MyAppHandler> {
+  bool _isLoading = true;
   bool _isLoggedIn = false;
+
+  SharedPreferences _prefs;
+
+  @override
+    void initState() {
+      super.initState();
+      this.checkAuthorized();
+    }
+
+  checkAuthorized() async {
+    _prefs = await SharedPreferences.getInstance();    
+    try {
+      String userid = _prefs.getString('id');      
+      if(userid.isNotEmpty) {
+        setState(() {
+          _isLoading = false;
+          _isLoggedIn = true;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          _isLoggedIn = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _isLoggedIn = false;
+      });
+    }
+  }
+
+  _onLoggedIn(LoginResponse data) {
+    setState(() {
+      _isLoggedIn = true;
+    });
+    _prefs.setString('id', data.id);
+    _prefs.setString('apiToken', data.apiToken);
+  }
+
+  _onLoggedOut() {
+    setState(() {
+      _isLoggedIn = false;
+    });
+    _prefs.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
     return new Container(
-      child: (_isLoggedIn
-            ? new HomePage()
-            : new LoginPage(
-              onLoggedIn: (isLoggedIn) {
-                setState(() {
-                  _isLoggedIn = isLoggedIn;
-                });
-              }
-            )),
+      child: (
+        _isLoading ?
+        new Text("Loading") :
+        new Container(
+          child: (_isLoggedIn
+                ? new HomePage(
+                  onLoggedOut: _onLoggedOut,
+                )
+                : new LoginPage(
+                  onLoggedIn: _onLoggedIn
+                )),
+        )
+      )
     );
   }
 }
