@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
 ThemeData mainTheme = new ThemeData(
-  primarySwatch: Colors.deepPurple
+  primarySwatch: Colors.deepPurple,
+  accentColor: Colors.purple[400]
 );
