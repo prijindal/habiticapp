@@ -17,7 +17,6 @@ login(String username, String password) async {
   var responseJson = JSON.decode(json);
   if (responseStream.statusCode == HttpStatus.OK) {
     var data = responseJson['data'];
-    print(data);
     LoginResponse responseData = new LoginResponse(data['id'], data['apiToken']);
     return responseData;
   } else {

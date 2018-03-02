@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
-import 'home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/login.dart';
+import '../screens/home.dart';
 
-import 'api/login.class.dart';
+import '../api/login.class.dart';
 
-class MyAppHandler extends StatefulWidget {
+class RootHandler extends StatefulWidget {
   // This widget is the root of your application.
 
   @override
-  _MyAppHandlerState createState() => new _MyAppHandlerState();
+  _RootHandlerState createState() => new _RootHandlerState();
 }
 
-class _MyAppHandlerState extends State<MyAppHandler> {
+class _RootHandlerState extends State<RootHandler> {
   bool _isLoading = true;
   bool _isLoggedIn = false;
 
@@ -82,7 +82,7 @@ class _MyAppHandlerState extends State<MyAppHandler> {
   }
 }
 
-class MyApp extends StatelessWidget {
+class RootApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: new MyAppHandler(),
+      home: new RootHandler(),
     );
   }
 }

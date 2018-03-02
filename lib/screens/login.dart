@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'api/login.dart';
-import 'api/login.class.dart';
+import '../api/login.dart';
+import '../api/login.class.dart';
+
+import '../helpers/focusnode.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({ Key key, this.onLoggedIn }): super(key: key);
@@ -18,16 +20,20 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordcontroller = new TextEditingController();
 
   String _error = "";
+  bool isLoggingLoading = false;
 
   _loginHabitica() async {
+    setState(() {
+      isLoggingLoading = true;
+    });
     try {
       LoginResponse data = await login(_emailcontroller.text, _passwordcontroller.text);
       if (!mounted) return;  
       // var result = data['id'];
       setState(() {
         _error = "";
+        isLoggingLoading = false;
       });
-      print(data);
       widget.onLoggedIn(data);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('id', data.id);
@@ -36,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
       print(e.toString());
       setState(() {
         _error = e.toString();
+        isLoggingLoading = false;
       });
     }
   }
@@ -84,6 +91,9 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _emailcontroller,
                       keyboardType: TextInputType.emailAddress,
                       initialValue: "priyanshujindal1995@gmail.com",
+                      focusNode: new AutoDisabledFocusNode(
+                        isEnabled: !isLoggingLoading
+                      ),
                       decoration: new InputDecoration(
                         icon: const Icon(Icons.person),
                         hintText: "Username"
@@ -96,6 +106,9 @@ class _LoginPageState extends State<LoginPage> {
                       keyboardType: TextInputType.text,
                       obscureText: true,
                       initialValue: "Priyanshu@95",
+                      focusNode: new AutoDisabledFocusNode(
+                        isEnabled: !isLoggingLoading
+                      ),
                       decoration: new InputDecoration(
                         icon: const Icon(Icons.person),
                         hintText: "Password"
@@ -105,9 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                   new ListTile(
                     // padding: new EdgeInsets.only(left: 24.0, top: 24.0),
                     title: new RaisedButton(
-                      onPressed: () {
-                        _loginHabitica();
-                      },
+                      onPressed: isLoggingLoading ? null : _loginHabitica,
                       child: new Text("Login"),
                     ),
                   ),
