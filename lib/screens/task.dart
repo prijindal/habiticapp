@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/task.dart';
-import '../libraries/markdown/flutter_markdown.dart';
 import '../helpers/markdown.dart';
 
 import '../helpers/theme.dart';

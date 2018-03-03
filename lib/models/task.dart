@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,6 +6,9 @@ final String columnId = "_id";
 final String columnUserId = "userId";
 final String columnText = "text";
 final String columnType = "type";
+final String columnUp = "up";
+final String columnDown = "down";
+final String columnDate = "date";
 
 class Task {
   Task(Map<String, dynamic> map) {
@@ -14,10 +16,21 @@ class Task {
     userId = map[columnUserId];
     text = map[columnText];
     type = map[columnType];
+    up = map[columnUp];
+    down = map[columnDown];
+    date = map[columnDate];
   }
 
   Map<String, dynamic> toMap() {
-    Map map = {columnUserId: userId, columnText: text, columnId: id, columnType: type};
+    Map map = {
+      columnUserId: userId,
+      columnText: text,
+      columnId: id,
+      columnType: type,
+      columnUp: up,
+      columnDown: down,
+      columnDate: date
+    };
     return map;
   }
 
@@ -25,6 +38,9 @@ class Task {
   String userId;
   String text;
   String type;
+  bool up = false;
+  bool down = false;
+  String date;
 
   @override
     String toString() {

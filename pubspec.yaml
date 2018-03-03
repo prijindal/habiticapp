@@ -10,6 +10,7 @@ dependencies:
   cupertino_icons: ^0.1.0
   shared_preferences: "^0.3.3"
   markdown: "^1.1.1"
+  simple_moment: "^0.0.2"
   # redux: "^2.1.1"
   # flutter_redux: "^0.3.5"
   # sqflite: "^0.7.1"
