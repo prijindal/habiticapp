@@ -9,6 +9,10 @@ final String columnType = "type";
 final String columnUp = "up";
 final String columnDown = "down";
 final String columnDate = "date";
+final String columnCompleted = "completed";
+final String columnCounterUp = "counterUp";
+final String columnCounterDown = "counterDown";
+final String columnStreak = "streak";
 
 class Task {
   Task(Map<String, dynamic> map) {
@@ -19,6 +23,10 @@ class Task {
     up = map[columnUp];
     down = map[columnDown];
     date = map[columnDate];
+    completed = map[columnCompleted];
+    counterUp = map[columnCounterUp];
+    counterDown = map[columnCounterDown];
+    streak = map[columnStreak];
   }
 
   Map<String, dynamic> toMap() {
@@ -29,7 +37,11 @@ class Task {
       columnType: type,
       columnUp: up,
       columnDown: down,
-      columnDate: date
+      columnDate: date,
+      columnCompleted: completed,
+      columnCounterUp: counterUp,
+      columnCounterDown: counterDown,
+      columnStreak: streak
     };
     return map;
   }
@@ -41,6 +53,10 @@ class Task {
   bool up = false;
   bool down = false;
   String date;
+  bool completed;
+  int counterDown;
+  int counterUp;
+  int streak;
 
   @override
     String toString() {
