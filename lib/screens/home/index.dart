@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'taskinput.dart';
+import 'task.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({ Key key, this.onLoggedOut }): super(key: key);  
@@ -34,6 +35,16 @@ class HomePageBody extends StatefulWidget {
 
 class _HomePageState extends State<HomePageBody> {
   bool _enableAddTask = false;
+  List<TaskContainer> _tasks = <TaskContainer>[];
+
+  _onNewTask(String task) {
+    TaskContainer taskContainer = new TaskContainer(
+      text: task,
+    );
+    setState(() {
+      _tasks.add(taskContainer);
+    });
+  }
 
   @override
     Widget build(BuildContext context) {
@@ -43,7 +54,11 @@ class _HomePageState extends State<HomePageBody> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               new Flexible(
-                child: new Text("Hello World")
+                child: new ListView.builder(
+                  padding: new EdgeInsets.all(8.0),
+                  itemBuilder: (_, int index) => _tasks[index],
+                  itemCount: _tasks.length,
+                )
               ),
               new Container(
                 child: (
@@ -53,7 +68,8 @@ class _HomePageState extends State<HomePageBody> {
                       setState(() {
                         _enableAddTask = false;
                       });
-                    }
+                    },
+                    onSubmit: _onNewTask
                   ) :
                   null
                 )
