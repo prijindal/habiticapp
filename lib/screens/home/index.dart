@@ -113,10 +113,13 @@ class _HomePageState extends State<HomePageBody> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               new Flexible(
-                child: new ListView.builder(
-                  padding: new EdgeInsets.all(8.0),
-                  itemBuilder: (_, int index) => _tasks[index],
-                  itemCount: _tasks.length,
+                child: new RefreshIndicator(
+                  onRefresh: _getTasks,
+                  child: new ListView.builder(
+                    padding: new EdgeInsets.all(8.0),
+                    itemBuilder: (_, int index) => _tasks[index],
+                    itemCount: _tasks.length,
+                  ),
                 )
               ),
               new Container(
