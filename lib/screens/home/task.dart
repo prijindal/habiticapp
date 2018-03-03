@@ -11,7 +11,9 @@ class TaskContainer extends StatelessWidget {
     Widget build(BuildContext context) {
       // TODO: implement build
       return new Container(
-        child: new Text(task.text)
+        child: new ListTile(
+          title: new Text(task.text)
+        )
       );
     }
 }
