@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     title: new TextFormField(
                       controller: _emailcontroller,
                       keyboardType: TextInputType.emailAddress,
-                      initialValue: "priyanshujindal1995@gmail.com",
+                      initialValue: "easycode-club@gmail.com",
                       focusNode: new AutoDisabledFocusNode(
                         isEnabled: !isLoggingLoading
                       ),
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordcontroller,
                       keyboardType: TextInputType.text,
                       obscureText: true,
-                      initialValue: "Priyanshu@95",
+                      initialValue: "easycode-club",
                       focusNode: new AutoDisabledFocusNode(
                         isEnabled: !isLoggingLoading
                       ),

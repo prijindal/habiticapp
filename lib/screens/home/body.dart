@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePageBody> {
   
   bool _enableAddTask = false;
   bool _isTasksLoading = true;
-  List<TaskContainer> _tasks = <TaskContainer>[];
+  List<Task> _tasks = <Task>[];
   TaskProvider _taskProvider;
 
   @override
@@ -41,13 +41,9 @@ class _HomePageState extends State<HomePageBody> {
       if(tasks == null) {
         return;
       }
-      List<TaskContainer> taskContainers = tasks.map((Task task) => new TaskContainer(task: task)).toList();      
-      if(taskContainers == null) {
-        return;
-      }
       if(_isTasksLoading && mounted) {
         setState(() {
-          _tasks = taskContainers;
+          _tasks = tasks;
         });
       }
     } catch(e) {
@@ -65,13 +61,9 @@ class _HomePageState extends State<HomePageBody> {
       if(data == null) {
         return;
       }
-      List<TaskContainer> taskContainers = data.map((Task task) => new TaskContainer(task: task)).toList();
-      if(taskContainers == null) {
-        return;
-      }
       if(!mounted) return;
       setState(() {
-        _tasks = taskContainers;
+        _tasks = data;
         _isTasksLoading = false;
       });
       _syncTasks();
@@ -82,18 +74,16 @@ class _HomePageState extends State<HomePageBody> {
 
   _syncTasks() async {
     try {
-      await _taskProvider.sync(_tasks.map((taskContainer) => taskContainer.task).toList());
+      await _taskProvider.sync(_tasks);
     } catch(e) {
       print(e);
     }
   }
 
   _onNewTask(String text) {
-    TaskContainer taskContainer = new TaskContainer(
-      task: new Task({'text': text}),
-    );
+    Task task = new Task({'text': text});
     setState(() {
-      _tasks.add(taskContainer);
+      _tasks.add(task);
     });
   }
 
@@ -104,13 +94,44 @@ class _HomePageState extends State<HomePageBody> {
           new Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              new Container(
+                height: 4.0,
+                child: (
+                  _isTasksLoading ?
+                  new LinearProgressIndicator(
+                    value: null,
+                  ) : null
+                )
+              ),
               new Flexible(
                 child: new RefreshIndicator(
                   onRefresh: _getTasks,
-                  child: new ListView.builder(
-                    padding: new EdgeInsets.all(0.0),
-                    itemBuilder: (_, int index) => _tasks[index],
-                    itemCount: _tasks.length,
+                  child: (
+                    (_tasks != null && _tasks.length > 0) ?
+                    new ListView.builder(
+                      padding: new EdgeInsets.all(0.0),
+                      itemBuilder: (_, int index) => new TaskContainer(
+                        task: _tasks[index],
+                        key: new Key(_tasks[index].id),
+                      ),
+                      itemCount: _tasks.length,
+                    ):
+                    new ListView(
+                      children: <Widget> [
+                        new ConstrainedBox(
+                          constraints: new BoxConstraints(
+                            minHeight: 64.0
+                          ),
+                          child: new Center(
+                            child: (
+                              _isTasksLoading ?
+                              new Text("Please Wait..."):
+                              new Text("No data here")
+                            )
+                          )
+                        ),
+                      ]
+                    )
                   ),
                 )
               ),
