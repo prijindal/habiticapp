@@ -6,22 +6,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 final String columnId = "_id";
 final String columnUserId = "userId";
 final String columnText = "text";
+final String columnType = "type";
 
 class Task {
   Task(Map<String, dynamic> map) {
-    _id = map[columnId];
+    id = map[columnId];
     userId = map[columnUserId];
     text = map[columnText];
+    type = map[columnType];
   }
 
   Map<String, dynamic> toMap() {
-    Map map = {columnUserId: userId, columnText: text, columnId: _id};
+    Map map = {columnUserId: userId, columnText: text, columnId: id, columnType: type};
     return map;
   }
 
-  String _id;
+  String id;
   String userId;
   String text;
+  String type;
 
   @override
     String toString() {

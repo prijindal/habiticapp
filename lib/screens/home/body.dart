@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePageBody> {
                 child: new RefreshIndicator(
                   onRefresh: _getTasks,
                   child: new ListView.builder(
-                    padding: new EdgeInsets.all(8.0),
+                    padding: new EdgeInsets.all(0.0),
                     itemBuilder: (_, int index) => _tasks[index],
                     itemCount: _tasks.length,
                   ),
