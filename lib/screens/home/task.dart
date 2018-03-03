@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../../models/task.dart';
+
 class TaskContainer extends StatelessWidget {
-  TaskContainer({Key key, this.text}):super(key: key);
+  TaskContainer({Key key, this.task}):super(key: key);
   
-  final String text;
+  final Task task;
 
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
       return new Container(
-        child: new Text(text)
+        child: new Text(task.text)
       );
     }
 }

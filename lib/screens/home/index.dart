@@ -1,12 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'taskinput.dart';
 import 'task.dart';
 
+import '../../api/tasks.dart';
+import '../../api/login.class.dart';
+import '../../models/task.dart';
+import '../../helpers/savedlogin.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({ Key key, this.onLoggedOut }): super(key: key);  
   final String title = "Home Page";
-  final Function onLoggedOut;  
+  final void Function() onLoggedOut;  
 
   @override
     Widget build(BuildContext context) {
@@ -35,11 +42,63 @@ class HomePageBody extends StatefulWidget {
 
 class _HomePageState extends State<HomePageBody> {
   bool _enableAddTask = false;
+  bool _isTasksLoading = true;
+  static const String type = "habits";
   List<TaskContainer> _tasks = <TaskContainer>[];
 
-  _onNewTask(String task) {
+  @override
+  initState() {
+    super.initState();
+    _getOfflineTasks();    
+    _getTasks();
+  }
+
+  _getOfflineTasks() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      // prefs.remove(type);
+      List<String> tasks = prefs.getStringList(type);
+      if(tasks == null) {
+        return;
+      }
+      List<TaskContainer> taskContainers = tasks.map((task) => new TaskContainer(task: new Task(JSON.decode(task)))).toList();
+      if(_isTasksLoading) {
+        setState(() {
+          _tasks = taskContainers;
+        });
+      }
+    } catch(e) {
+      print(e);
+    }
+  }
+
+  _getTasks() async {
+    try {
+      setState(() {
+        _isTasksLoading = true;
+      });
+      LoginResponse loginInformation = await getLoginInformation();
+      List<Task> data = await getTasks(type: type, loginInformation: loginInformation);
+      List<TaskContainer> taskContainers = data.map((Task task) => new TaskContainer(task: task)).toList();
+      setState(() {
+        _tasks = taskContainers;
+        _isTasksLoading = false;
+      });
+      _syncTasks();
+    } catch(e) {
+      print(e);
+    }
+  }
+
+  _syncTasks() async {
+    // TODO: Switch to sqlite
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(type, _tasks.map((taskContainer) => JSON.encode(taskContainer.task.toMapped())).toList());
+  }
+
+  _onNewTask(String text) {
     TaskContainer taskContainer = new TaskContainer(
-      text: task,
+      task: new Task({'text': 'text'}),
     );
     setState(() {
       _tasks.add(taskContainer);
@@ -96,7 +155,7 @@ class _HomePageState extends State<HomePageBody> {
 class AddTaskFloating extends StatelessWidget {
   AddTaskFloating({Key key, this.onPressed}): super(key: key);
 
-  final Function onPressed;
+  final void Function() onPressed;
 
   @override
     Widget build(BuildContext context) {

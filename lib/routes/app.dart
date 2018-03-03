@@ -14,7 +14,7 @@ class App extends StatelessWidget {
   App({ Key key, this.user, this.onLoggedOut }): super(key: key);
 
   final User user;
-  final Function onLoggedOut;
+  final void Function() onLoggedOut;
 
     Widget build(BuildContext context) {
       return new MaterialApp(

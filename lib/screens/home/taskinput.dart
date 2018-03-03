@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 class AddTaskInput extends StatefulWidget {
   AddTaskInput({Key key, this.onBackButton, this.onSubmit}): super(key: key);
 
-  final Function() onBackButton;
-  final Function(String text) onSubmit;
+  final void Function() onBackButton;
+  final void Function(String text) onSubmit;
 
   @override
   _AddTaskInputState createState() => new _AddTaskInputState();
