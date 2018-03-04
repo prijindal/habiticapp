@@ -6,8 +6,23 @@ import 'login.class.dart';
 
 Future<List<Task>> getTasks({String type, LoginResponse loginInformation}) async {
   var url = "/tasks/user";
-  Map<String, dynamic> responseJson = await get(url, {"type": type}, loginInformation);
+  var query = {};
+  if(type != null) {
+    query["type"] = type;
+  }
+  Map<String, dynamic> responseJson = await get(url, query, loginInformation);
   List<Map<String, dynamic>> data = responseJson['data'];
   List<Task> tasks = data.map((task) => new Task(task)).toList();
   return tasks;
+}
+
+Future<Task> addNewTask(Task task, LoginResponse loginInformation) async {
+  var url = "/tasks/user";
+  Map<String, dynamic> responseJson = await post(url, task.toMap(), null, loginInformation);
+  if(responseJson['success'] == true) {
+    Map<String, dynamic> data = responseJson['data'];
+    return new Task(data);
+  } else {
+    throw new Exception(responseJson['error']);
+  }
 }

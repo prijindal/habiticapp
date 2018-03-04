@@ -13,7 +13,7 @@ Uri uriBuilder(String url, [Map<String, dynamic> query]) {
   return new Uri(host: HOST, path: API_PATH + url, queryParameters: query, scheme: "https");
 }
 
-post(String url, Map<String, dynamic> body, [String apiToken]) async {
+loginPost(String url, Map<String, dynamic> body, [String apiToken]) async {
   var httpClient = new http.Client();
   Uri uri = uriBuilder(url);
   var request = new http.Request('POST', uri);
@@ -22,21 +22,48 @@ post(String url, Map<String, dynamic> body, [String apiToken]) async {
   return responseStream;
 }
 
-Future<Map<String, dynamic>> get(String url, [Map<String,String> query, LoginResponse loginInformation]) async {
-  var httpClient = new http.Client();
+Map<String, String> getHeaders([LoginResponse loginInformation]) {
   Map<String, String> headers = {};
-  Uri uri = uriBuilder(url, query);
   if(loginInformation != null) {
     headers['x-api-key'] = loginInformation.apiToken;
     headers['x-api-user'] = loginInformation.id;
+    headers['content-type'] = "application/json";
   }
-  var responseStream = await httpClient.get(uri, headers: headers);
-  String response = responseStream.body;
+  return headers;
+}
+
+Future<Map<String, dynamic>> get(String url, [Map<String,String> query, LoginResponse loginInformation]) async {
+  var httpClient = new http.Client();
+  var headers = getHeaders(loginInformation);
+  Uri uri = uriBuilder(url, query);
+  http.Request request = new http.Request("GET", uri);
+  request.headers.addAll(headers);
+  var responseStream = await httpClient.send(request);
+  return await postProcess(responseStream);
+}
+
+Future<Map<String, dynamic>> post(String url, Map<String, dynamic> body, [Map<String,String> query, LoginResponse loginInformation]) async {
+  var httpClient = new http.Client();
+  var headers = getHeaders(loginInformation);
+  Uri uri = uriBuilder(url, query);
+  http.Request request = new http.Request("POST", uri);
+  request.body = JSON.encode(body);
+  request.headers.addAll(headers);
+  var responseStream = await httpClient.send(request);
+  return await postProcess(responseStream);
+}
+
+postProcess(http.StreamedResponse responseStream) async {
+  String response = await responseStream.stream.bytesToString();
   var responseJson = JSON.decode(response);
-  if (responseStream.statusCode == HttpStatus.OK) {
+  if (
+    responseStream.statusCode == HttpStatus.ACCEPTED ||
+    responseStream.statusCode == HttpStatus.CREATED || 
+    responseStream.statusCode == HttpStatus.OK
+  ) {
     return responseJson;
   } else {
-    throw new Exception(responseJson['error']);    
+    throw new Exception(responseJson);
   }
 }
 

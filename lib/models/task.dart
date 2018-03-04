@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final String columnId = "_id";
+final String columnId = "id";
 final String columnUserId = "userId";
 final String columnText = "text";
 final String columnType = "type";
@@ -14,35 +14,62 @@ final String columnCounterUp = "counterUp";
 final String columnCounterDown = "counterDown";
 final String columnStreak = "streak";
 
+final List<String> columns = [
+  columnId,
+  columnUserId,
+  columnText,
+  columnType,
+  columnUp,
+  columnDown,
+  columnDate,
+  columnCompleted,
+  columnCounterUp,
+  columnCounterDown,
+  columnStreak,
+];
+
 class Task {
   Task(Map<String, dynamic> map) {
-    id = map[columnId];
-    userId = map[columnUserId];
-    text = map[columnText];
-    type = map[columnType];
-    up = map[columnUp];
-    down = map[columnDown];
-    date = map[columnDate];
-    completed = map[columnCompleted];
-    counterUp = map[columnCounterUp];
-    counterDown = map[columnCounterDown];
-    streak = map[columnStreak];
+    id = getDefaultMap(map, columnId);
+    userId = getDefaultMap(map, columnUserId);
+    text = getDefaultMap(map, columnText);
+    type = getDefaultMap(map, columnType);
+    date = getDefaultMap(map, columnDate);
+
+    up = getDefaultMap(map, columnUp, false);
+    down = getDefaultMap(map, columnDown, false);
+    completed = getDefaultMap(map, columnCompleted, false);
+    counterUp = getDefaultMap(map, columnCounterUp, 0);
+    counterDown = getDefaultMap(map, columnCounterDown, 0);
+    streak = getDefaultMap(map, columnStreak, 0);
+  }
+
+  dynamic getDefaultMap(Map<String, dynamic> map, String column, [dynamic defaultValue]) {
+    if(map.containsKey(column)) {
+      return map[column];
+    } else {
+      return defaultValue;
+    }
   }
 
   Map<String, dynamic> toMap() {
     Map map = {
-      columnUserId: userId,
+      // columnId: id,      
+      // columnUserId: userId,
       columnText: text,
-      columnId: id,
       columnType: type,
-      columnUp: up,
-      columnDown: down,
-      columnDate: date,
-      columnCompleted: completed,
-      columnCounterUp: counterUp,
-      columnCounterDown: counterDown,
-      columnStreak: streak
     };
+    map = checkNullAndAdd(map, columnDate, date);
+    map = checkNullAndAdd(map, columnUp, up);
+    map = checkNullAndAdd(map, columnDown, down);
+    map = checkNullAndAdd(map, columnStreak, streak);
+    return map;
+  }
+
+  dynamic checkNullAndAdd(Map<String, dynamic> map, String key, dynamic value) {
+    if (value != null) {
+      map[key] = value;
+    }
     return map;
   }
 
@@ -50,8 +77,8 @@ class Task {
   String userId;
   String text;
   String type;
-  bool up = false;
-  bool down = false;
+  bool up;
+  bool down;
   String date;
   bool completed;
   int counterDown;
@@ -77,6 +104,7 @@ class TaskProvider {
 
   Future<List<Task>> getTasks() async {
     String maps = prefs.getString(tableTask);
+    if(maps == null) {return null;}
     List<dynamic> tasks = JSON.decode(maps);
     return tasks.map((task) => new Task(task)).toList();
   }

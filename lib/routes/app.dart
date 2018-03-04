@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../screens/home/index.dart';
 
 import '../helpers/theme.dart';
+import '../store.dart';
 
 class User {
   String id;
@@ -10,10 +11,10 @@ class User {
   User({this.id, this.apiToken});
 }
 
-class App extends StatelessWidget {
-  App({ Key key, this.user, this.onLoggedOut }): super(key: key);
 
-  final User user;
+class App extends StatelessWidget {
+  App({ Key key, this.onLoggedOut }): super(key: key);
+
   final void Function() onLoggedOut;
 
     Widget build(BuildContext context) {

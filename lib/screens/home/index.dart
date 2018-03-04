@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../sagas/tasks.dart';
 import 'body.dart';
 
 class Choice {
@@ -10,16 +11,30 @@ class Choice {
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(title: 'HABITS', icon: Icons.directions_car, type: "habits"),
-  const Choice(title: 'DAILIES', icon: Icons.directions_bike, type: "dailys"),
-  const Choice(title: 'TASKS', icon: Icons.directions_boat, type: "todos"),
-  const Choice(title: 'REWARDS', icon: Icons.directions_bus, type: "rewards"),
+  const Choice(title: 'HABITS', icon: Icons.directions_car, type: "habit"),
+  const Choice(title: 'DAILIES', icon: Icons.directions_bike, type: "daily"),
+  const Choice(title: 'TASKS', icon: Icons.directions_boat, type: "todo"),
+  const Choice(title: 'REWARDS', icon: Icons.directions_bus, type: "reward"),
 ];
 
-class HomePage extends StatelessWidget {
-  HomePage({ Key key, this.onLoggedOut }): super(key: key);  
+class HomePage extends StatefulWidget {
+  HomePage({ Key key, this.onLoggedOut }): super(key: key);
+  final void Function() onLoggedOut;
+  @override
+  HomePageState createState() => new HomePageState(onLoggedOut: onLoggedOut);
+}
+
+class HomePageState extends State<HomePage> {
+  HomePageState({ this.onLoggedOut });  
   final String title = "Home Page";
-  final void Function() onLoggedOut;  
+  final void Function() onLoggedOut;
+  
+  @override
+    void initState() {
+      super.initState();
+      getOfflineTasks();
+      getNetworkTasks();
+    }
 
   @override
     Widget build(BuildContext context) {

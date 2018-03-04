@@ -46,7 +46,7 @@ class _TaskContainerState extends State<TaskContainer> {
     Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
   }
 
-  _onTodoToggled(bool newValue) {
+  void _onTodoToggled(dynamic newValue) {
     Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(newValue.toString())));    
   }
 
