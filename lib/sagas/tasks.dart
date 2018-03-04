@@ -1,6 +1,5 @@
 import 'package:uuid/uuid.dart';
 
-import '../api/login.class.dart';
 import '../api/tasks.dart';
 import '../helpers/savedlogin.dart';
 
@@ -8,35 +7,28 @@ import '../models/task.dart';
 import '../actions/tasks.dart';
 import '../store.dart';
 
-final _taskProvider = new TaskProvider(tableTask: "tasks");
+import 'base.dart';
+
+final _taskProvider = new TaskProvider(table: "tasks");
 final uuid = new Uuid();
 
+
 getOfflineTasks() async {
-  try {
-    await _taskProvider.open();
-    List<Task> newtasks = await _taskProvider.getTasks();
-    if(newtasks == null) {
-      return;
-    }
-    store.dispatch(populateTasks(newtasks));
-  } catch(e) {
-    print("SAGAS, Error:" + e.toString());
-    print(e);
-  }
+  return await getOfflineObjects(_taskProvider, tasksstore, (objects) => TaskAction.populateTasks(objects));
 }
 
 
 getNetworkTasks() async {
   try {
-    store.dispatch(startLoading());
+    tasksstore.dispatch(TaskAction.startLoading());
     var loginInformation = await getLoginInformation();
     List<Task> data = await getTasks(loginInformation: loginInformation);
     if(data == null) {
       return;
     }
-    store.dispatch(populateTasks(data));
-    store.dispatch(stopLoading());
-    syncTasks(store.state.tasks);
+    tasksstore.dispatch(TaskAction.populateTasks(data));
+    tasksstore.dispatch(TaskAction.stopLoading());
+    syncTasks(data);
   } catch(e) {
     print(e);
   }
@@ -49,25 +41,26 @@ onNewTask(String text, String type) async {
     'id': uuid.v1(),
     'text': text,
   });
-  store.dispatch(addTask(task));
-  store.dispatch(startLoading());
+  tasksstore.dispatch(TaskAction.addTask(task));
+  tasksstore.dispatch(TaskAction.startLoading());
   try {
     Task addedTask = await addNewTask(new Task({'text': text, 'type': type}), loginInformation);
-    int foundTaskIndex = store.state.tasks.lastIndexWhere((Task checkingTask) {
+    int foundTaskIndex = tasksstore.state.tasks.lastIndexWhere((Task checkingTask) {
       return checkingTask.id == task.id;
     });
-    store.dispatch(replaceTask(foundTaskIndex, addedTask));
-    store.dispatch(stopLoading());
-    syncTasks(store.state.tasks);
+    tasksstore.dispatch(TaskAction.replaceTask(foundTaskIndex, addedTask));
+    tasksstore.dispatch(TaskAction.stopLoading());
+    syncTasks(tasksstore.state.tasks);
   } catch(e) {
     print(e);
   }
 }
 
 syncTasks(tasks) async {
-  try {
-    await _taskProvider.sync(tasks);
-  } catch(e) {
-    print(e);
-  }
+  syncObject(_taskProvider, tasks);
+}
+
+
+clearTasks() {
+  tasksstore.dispatch(TaskAction.clear());
 }

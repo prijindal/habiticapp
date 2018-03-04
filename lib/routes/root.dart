@@ -8,7 +8,12 @@ import 'app.dart';
 
 import '../api/login.class.dart';
 
+import '../sagas/user.dart';
+import '../sagas/tasks.dart';
+import '../store.dart';
+
 import '../helpers/theme.dart';
+
 class RootHandler extends StatefulWidget {
   // This widget is the root of your application.
 
@@ -38,6 +43,8 @@ class _RootHandlerState extends State<RootHandler> {
           _isLoading = false;
           _isLoggedIn = true;
         });
+        getOfflineUser();
+        getNetworkUser();
       } else {
         setState(() {
           _isLoading = false;
@@ -58,6 +65,7 @@ class _RootHandlerState extends State<RootHandler> {
     });
     _prefs.setString('id', data.id);
     _prefs.setString('apiToken', data.apiToken);
+    getNetworkUser();
   }
 
   _onLoggedOut() {
@@ -65,6 +73,8 @@ class _RootHandlerState extends State<RootHandler> {
       _isLoggedIn = false;
     });
     _prefs.clear();
+    clearUser();
+    clearTasks();
   }
 
   @override

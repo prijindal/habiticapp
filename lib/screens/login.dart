@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       prefs.setString('id', data.id);
       prefs.setString('apiToken', data.apiToken);
     } catch(e) {
-      print(e.toString());
+      print(e);
       setState(() {
         _error = e.toString();
         isLoggingLoading = false;

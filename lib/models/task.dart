@@ -1,6 +1,5 @@
-import 'dart:convert';
-import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'base.dart';
+import 'provider.dart';
 
 final String columnId = "id";
 final String columnUserId = "userId";
@@ -28,8 +27,9 @@ final List<String> columns = [
   columnStreak,
 ];
 
-class Task {
-  Task(Map<String, dynamic> map) {
+class Task extends BaseObject {
+  @override
+  Task(Map<String, dynamic> map):super(map) {
     id = getDefaultMap(map, columnId);
     userId = getDefaultMap(map, columnUserId);
     text = getDefaultMap(map, columnText);
@@ -44,14 +44,7 @@ class Task {
     streak = getDefaultMap(map, columnStreak, 0);
   }
 
-  dynamic getDefaultMap(Map<String, dynamic> map, String column, [dynamic defaultValue]) {
-    if(map.containsKey(column)) {
-      return map[column];
-    } else {
-      return defaultValue;
-    }
-  }
-
+  @override
   Map<String, dynamic> toMap() {
     Map map = {
       // columnId: id,      
@@ -66,13 +59,6 @@ class Task {
     return map;
   }
 
-  dynamic checkNullAndAdd(Map<String, dynamic> map, String key, dynamic value) {
-    if (value != null) {
-      map[key] = value;
-    }
-    return map;
-  }
-
   String id;
   String userId;
   String text;
@@ -84,34 +70,19 @@ class Task {
   int counterDown;
   int counterUp;
   int streak;
-
-  @override
-    String toString() {
-      return toMap().toString();
-    }
 }
 
-class TaskProvider {
-  SharedPreferences prefs;
-  final String tableTask;
+class TaskProvider extends ListProvider<Task> {
+  TaskProvider({String table}):super(table:table);
 
-  TaskProvider({this.tableTask});
-
-  Future open() async {
-    prefs = await SharedPreferences.getInstance();
-    return;
-  }
-
-  Future<List<Task>> getTasks() async {
-    String maps = prefs.getString(tableTask);
-    if(maps == null) {return null;}
-    List<dynamic> tasks = JSON.decode(maps);
-    return tasks.map((task) => new Task(task)).toList();
-  }
-
-  Future<void> sync([List<Task> tasks]) async {
-    prefs.setString(tableTask, JSON.encode(tasks.map((task) => task.toMap()).toList()));
-  }
-
-  Future<bool> close() => prefs.commit();
+  @override
+    Task newElement(object) {
+      // TODO: implement newElement
+      return new Task(object);
+    }
+  @override
+    Map<String, dynamic> mapElement(Task object) {
+      // TODO: implement mapElement
+      return object.toMap();
+    }
 }

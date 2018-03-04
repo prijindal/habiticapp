@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 
 import '../../sagas/tasks.dart';
+import '../../components/drawer.dart';
 import 'body.dart';
 
 class Choice {
@@ -41,6 +42,7 @@ class HomePageState extends State<HomePage> {
       return new DefaultTabController(
         length: choices.length,
         child: new Scaffold(
+          drawer: new MainDrawer(),
           appBar: new AppBar(
             elevation: 4.0,
             title: new Text("Habitica"),

@@ -2,15 +2,6 @@ import 'package:flutter/material.dart';
 import '../screens/home/index.dart';
 
 import '../helpers/theme.dart';
-import '../store.dart';
-
-class User {
-  String id;
-  String apiToken;
-
-  User({this.id, this.apiToken});
-}
-
 
 class App extends StatelessWidget {
   App({ Key key, this.onLoggedOut }): super(key: key);

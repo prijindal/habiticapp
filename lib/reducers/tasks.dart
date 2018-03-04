@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-
-import '../models/task.dart';
 import '../actions/tasks.dart';
 
 TasksState tasksReducer(TasksState state, TaskAction action) {
@@ -25,6 +20,9 @@ TasksState tasksReducer(TasksState state, TaskAction action) {
   }
   if(action.type == Actions.StopLoading) {
     state.isLoading = false;
+  }
+  if(action.type == Actions.Clear) {
+    return new TasksState();
   }
   return state;
 }

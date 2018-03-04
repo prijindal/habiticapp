@@ -23,13 +23,13 @@ class _HomePageState extends State<HomePageBody> {
   
   bool _enableAddTask = false;
   List<Task> tasks;
-  bool isLoading = store.state.isLoading;
+  bool isLoading = tasksstore.state.isLoading;
 
   @override
   initState() {
-    tasks = reduceTasks(store.state.tasks);
+    tasks = reduceTasks(tasksstore.state.tasks);
     super.initState();
-    store.onChange.listen((state) {
+    tasksstore.onChange.listen((state) {
       if(mounted) {
         setState(() {
           tasks = reduceTasks(state.tasks);

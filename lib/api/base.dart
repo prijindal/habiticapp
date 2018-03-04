@@ -27,7 +27,6 @@ Map<String, String> getHeaders([LoginResponse loginInformation]) {
   if(loginInformation != null) {
     headers['x-api-key'] = loginInformation.apiToken;
     headers['x-api-user'] = loginInformation.id;
-    headers['content-type'] = "application/json";
   }
   return headers;
 }
@@ -35,6 +34,7 @@ Map<String, String> getHeaders([LoginResponse loginInformation]) {
 Future<Map<String, dynamic>> get(String url, [Map<String,String> query, LoginResponse loginInformation]) async {
   var httpClient = new http.Client();
   var headers = getHeaders(loginInformation);
+  headers['content-type'] = "application/json";
   Uri uri = uriBuilder(url, query);
   http.Request request = new http.Request("GET", uri);
   request.headers.addAll(headers);
@@ -45,6 +45,7 @@ Future<Map<String, dynamic>> get(String url, [Map<String,String> query, LoginRes
 Future<Map<String, dynamic>> post(String url, Map<String, dynamic> body, [Map<String,String> query, LoginResponse loginInformation]) async {
   var httpClient = new http.Client();
   var headers = getHeaders(loginInformation);
+  headers['content-type'] = "application/json";  
   Uri uri = uriBuilder(url, query);
   http.Request request = new http.Request("POST", uri);
   request.body = JSON.encode(body);
