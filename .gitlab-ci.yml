@@ -1,4 +1,5 @@
 before_script:
+  - sudo apt-get install unzip -y
   - git clone https://github.com/flutter/flutter.git -b beta --depth 1
   - ./flutter/bin/flutter doctor
 
