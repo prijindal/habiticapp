@@ -4,4 +4,4 @@ before_script:
 
 release:
   script:
-    - ./flutter/bin/flutter build apk --release
+    - ./ci/deploy.sh
