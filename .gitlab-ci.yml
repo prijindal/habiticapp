@@ -1,7 +1,0 @@
-before_script:
-  - apt-get update -qq && apt-get install -y build-essential unzip lib32stdc++6 libstdc++6 fonts-droid
-  - ./ci/setup.sh
-
-release:
-  script:
-    - ./ci/deploy.sh
