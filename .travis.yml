@@ -13,6 +13,7 @@ addons:
 before_script:
   - ./ci/setup.sh
 script:
+  - ./ci/lint.sh
   - ./ci/deploy.sh
 cache:
   directories:
