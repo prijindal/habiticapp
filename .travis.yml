@@ -38,9 +38,10 @@ script:
   - ./flutter/bin/flutter analyze lib/ test/
   - ./flutter/bin/flutter test --coverage
 
-after_script:
-  - coveralls-lcov coverage/lcov.info
-
 after_success:
+  - coveralls-lcov coverage/lcov.info  
   - ./ci/setup.sh 
   - ./ci/build.sh
+
+after_failure:
+  - coveralls-lcov coverage/lcov.info    
