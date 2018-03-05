@@ -49,5 +49,4 @@ deploy:
   file: build/app/outputs/apk/release/app-release.apk
   overwrite: true
   on:
-    os: linux
-    condition: $SHARD = build_and_deploy
+    condition: $TRAVIS_OS_NAME = linux  && $SHARD = build_and_deploy
