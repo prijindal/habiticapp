@@ -15,5 +15,6 @@ if [ "$SHARD" = "build_and_deploy" ]; then
     echo "iOS Flutter Gallery built"
   fi
 else
- flutter analyze
+  flutter packages get
+  dart flutter/bin/cache/dart-sdk/bin/snapshots/dartanalyzer.dart.snapshot lib/
 fi
