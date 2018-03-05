@@ -1,7 +1,6 @@
 before_script:
   - apt-get update -qq && apt-get install -y build-essential unzip
-  - git clone https://github.com/flutter/flutter.git -b beta --depth 1
-  - ./flutter/bin/flutter doctor
+  - ./ci/setup.sh
 
 release:
   script:
