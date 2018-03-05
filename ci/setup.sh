@@ -3,6 +3,8 @@ set -e
 
 set -x
 
+git clone https://github.com/flutter/flutter.git -b beta --depth 1
+
 if [ -n "$TRAVIS" ]; then
   # Android SDK only needed to build the gallery on build_and_deploy_gallery Linux shard.
   if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$SHARD" = "build_and_deploy" ]; then
@@ -36,7 +38,6 @@ if [ -n "$TRAVIS" ]; then
     export PATH=$GRADLE_HOME/bin:$PATH
     gradle -v
 
-    git clone https://github.com/flutter/flutter.git -b beta --depth 1
     ./flutter/bin/flutter doctor -v
   fi
 fi
