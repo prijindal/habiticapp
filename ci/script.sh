@@ -14,8 +14,6 @@ if [ "$SHARD" = "build_and_deploy" ]; then
     flutter build ios --release -no-codesign
     echo "iOS Flutter Gallery built"
   fi
-
-fi
 else
   dartanalyzer lib
 fi
