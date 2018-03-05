@@ -12,7 +12,7 @@ class AddTaskInput extends StatefulWidget {
   _AddTaskInputState createState() => new _AddTaskInputState();
 }
 
-class _AddTaskInputState extends State<AddTaskInput> implements WidgetsBindingObserver {
+class _AddTaskInputState extends State<AddTaskInput> with WidgetsBindingObserver {
   TextEditingController _addTaskController = new TextEditingController();
   FocusNode _addTaskFocusNode = new FocusNode();
 
