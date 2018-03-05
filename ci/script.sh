@@ -31,12 +31,12 @@ if [ "$SHARD" = "build_and_deploy" ]; then
     flutter build ios --release --no-codesign
     echo "iOS Application built"
 
-    echo "Deploying Ios application to Github"
-    wget "https://github.com/aktau/github-release/releases/download/v$GITHUB_RELEASE_VERSION/darwin-amd64-github-release.tar.bz2"
-    mkdir github-release
-    tar xvjf darwin-amd64-github-release.tar.bz2 -C github-release
-    ./github-release/bin/darwin/amd64/github-release upload -u $USER_NAME -r $REPO_NAME --tag $TAG_NAME --name "Runner.app" --file build/ios/iphoneos/Runner.app -R
-    echo "Ios Deploy Successfull"
+    # echo "Deploying Ios application to Github"
+    # wget "https://github.com/aktau/github-release/releases/download/v$GITHUB_RELEASE_VERSION/darwin-amd64-github-release.tar.bz2"
+    # mkdir github-release
+    # tar xvjf darwin-amd64-github-release.tar.bz2 -C github-release
+    # ./github-release/bin/darwin/amd64/github-release upload -u $USER_NAME -r $REPO_NAME --tag $TAG_NAME --name "Runner.app" --file build/ios/iphoneos/Runner.app -R
+    # echo "Ios Deploy Successfull"
 
   fi
 else
