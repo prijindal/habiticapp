@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/task.dart';
 import '../helpers/markdown.dart';
-
-import '../helpers/theme.dart';
 
 class TaskScreen extends StatefulWidget {
   TaskScreen({ Key key, this.task }): super(key: key);

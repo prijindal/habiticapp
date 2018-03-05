@@ -14,8 +14,6 @@ class TaskContainer extends StatefulWidget {
   TaskContainer({Key key, this.task}):super(key: key);
   final Task task;
 
-  static double SIZE = 128.0;
-
   @override
   _TaskContainerState createState() => new _TaskContainerState(task: task);
 }
@@ -25,7 +23,6 @@ class _TaskContainerState extends State<TaskContainer> {
 
   Task task;
   bool _isSelected = false;
-  static double SIZE = TaskContainer.SIZE;
 
   _toggleSelected() {
     setState(() {
@@ -61,7 +58,6 @@ class _TaskContainerState extends State<TaskContainer> {
     Widget build(BuildContext context) {
       // TODO: implement build
       return new Container(
-        // height: SIZE,
         color: (
           _isSelected ?
           Colors.black26:

@@ -10,7 +10,6 @@ import '../api/login.class.dart';
 
 import '../sagas/user.dart';
 import '../sagas/tasks.dart';
-import '../store.dart';
 
 import '../helpers/theme.dart';
 

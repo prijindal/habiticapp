@@ -9,7 +9,6 @@ import 'task.dart';
 
 import '../../models/task.dart';
 
-import '../../sagas/tasks.dart';
 import '../../store.dart';
 
 class Choice {
