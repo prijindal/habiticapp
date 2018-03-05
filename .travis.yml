@@ -50,4 +50,4 @@ deploy:
   overwrite: true
   on:
     os: linux
-    condition: SHARD=build_and_deploy
+    condition: $SHARD = build_and_deploy
