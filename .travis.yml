@@ -1,6 +1,20 @@
 os:
   - linux
+  - osx
+osx_image: xcode9.2
+
+env:
+  - SHARD=analyze
+  - SHARD=build_and_deploy
+
+matrix:
+  exclude:
+  - os: osx
+    env: SHARD=analyze
+
 sudo: false
+filter_secrets: false
+
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
@@ -10,11 +24,20 @@ addons:
       - lib32stdc++6
       - libstdc++6
       - fonts-droid
-before_script:
-  - ./ci/setup.sh
-script:
-  - ./ci/lint.sh
-  - ./ci/deploy.sh
+
+git:
+  # We rely on git tags for determining the version.
+  depth: false
+
 cache:
+  bundler: true
   directories:
     - $HOME/.pub-cache
+
+# Testing
+before_script:
+  - ./ci/setup.sh
+
+script:
+  - ulimit -S -n 2048  
+  - ./ci/script.sh
