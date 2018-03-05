@@ -40,5 +40,7 @@ script:
 
 after_script:
   - coveralls-lcov coverage/lcov.info
+
+after_success:
   - ./ci/setup.sh 
   - ./ci/build.sh
