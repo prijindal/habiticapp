@@ -14,6 +14,8 @@ class TaskContainer extends StatefulWidget {
   TaskContainer({Key key, this.task}):super(key: key);
   final Task task;
 
+  static double SIZE = 128.0;
+
   @override
   _TaskContainerState createState() => new _TaskContainerState(task: task);
 }
@@ -23,6 +25,7 @@ class _TaskContainerState extends State<TaskContainer> {
 
   Task task;
   bool _isSelected = false;
+  static double SIZE = TaskContainer.SIZE;
 
   _toggleSelected() {
     setState(() {
@@ -58,6 +61,7 @@ class _TaskContainerState extends State<TaskContainer> {
     Widget build(BuildContext context) {
       // TODO: implement build
       return new Container(
+        // height: SIZE,
         color: (
           _isSelected ?
           Colors.black26:
@@ -240,16 +244,24 @@ class TaskText extends StatelessWidget {
 class BottomRowTasks extends StatelessWidget {
   BottomRowTasks({Key key, this.task}):super(key: key);
   final Task task;
+
+  String _getFromNowDate() {
+    if(task.date == null) {
+      return "";
+    }
+    try {
+      return new Moment.fromDate(new DateTime.now()).from(DateTime.parse(task.date));
+    } catch(e) {
+      return "";
+    }
+  }
+
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
-      return (
-        task.date != null ?
-        new Text(
-          new Moment.fromDate(new DateTime.now()).from(DateTime.parse(task.date)),
-          style: mainTheme.textTheme.caption
-        ) :
-        new Text("")
+      return new Text(
+        _getFromNowDate(),
+        style: mainTheme.textTheme.caption
       );
     }
 }
@@ -262,8 +274,14 @@ class BottomRowHabits extends StatelessWidget {
       // TODO: implement build
       return new Row(
         children: <Widget>[
-          new Icon(Icons.fast_forward),
-          new Text("+${task.counterUp} | -${task.counterDown}"),
+          new Icon(
+            Icons.fast_forward,
+            color: mainTheme.textTheme.caption.color,
+          ),
+          new Text(
+            "+${task.counterUp} | -${task.counterDown}",
+            style: mainTheme.textTheme.caption
+          ),
         ],
       );
     }
@@ -277,8 +295,14 @@ class BottomRowDailys extends StatelessWidget {
       // TODO: implement build
       return new Row(
         children: <Widget>[
-          new Icon(Icons.fast_forward),
-          new Text("${task.streak}"),
+          new Icon(
+            Icons.fast_forward,
+            color: mainTheme.textTheme.caption.color,
+          ),
+          new Text(
+            "${task.streak}",
+            style: mainTheme.textTheme.caption
+          ),
         ],
       );
     }

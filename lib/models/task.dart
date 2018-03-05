@@ -47,8 +47,8 @@ class Task extends BaseObject {
   @override
   Map<String, dynamic> toMap() {
     Map map = {
-      // columnId: id,      
-      // columnUserId: userId,
+      columnId: id,
+      columnUserId: userId,
       columnText: text,
       columnType: type,
     };

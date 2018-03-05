@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../sagas/tasks.dart';
 import '../../components/drawer.dart';
-import 'body.dart';
+// import 'body.dart';
+
+import 'taskinput.dart';
+import 'task.dart';
+
+import '../../models/task.dart';
+
+import '../../sagas/tasks.dart';
+import '../../store.dart';
 
 class Choice {
   const Choice({ this.title, this.icon,this.type });
@@ -18,6 +26,9 @@ const List<Choice> choices = const <Choice>[
   const Choice(title: 'REWARDS', icon: Icons.directions_bus, type: "reward"),
 ];
 
+
+enum PopupActions { refresh, exit }
+
 class HomePage extends StatefulWidget {
   HomePage({ Key key, this.onLoggedOut }): super(key: key);
   final void Function() onLoggedOut;
@@ -25,52 +36,161 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => new HomePageState(onLoggedOut: onLoggedOut);
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   HomePageState({ this.onLoggedOut });  
   final String title = "Home Page";
   final void Function() onLoggedOut;
   
+  bool _enableAddTask = false;
+  List<Task> tasks;
+  bool isLoading = tasksstore.state.isLoading;
+  TabController _tabController;
+
   @override
-    void initState() {
-      super.initState();
-      getOfflineTasks();
-      getNetworkTasks();
+  initState() {
+    super.initState();
+    _tabController = new TabController(vsync: this, length: choices.length);
+    tasks = tasksstore.state.tasks;     
+    tasksstore.onChange.listen((state) {
+      if(mounted) {
+        setState(() {
+          tasks = state.tasks;
+          isLoading = state.isLoading;
+        });
+      }
+    });
+    getOfflineTasks();
+    getNetworkTasks();
+  }
+
+  void _handlePopupActions(PopupActions action) {
+    switch (action) {
+      case PopupActions.refresh:
+        getNetworkTasks();
+        break;
+      case PopupActions.exit:
+        onLoggedOut();
+        break;
+      default:
     }
+  }
 
   @override
     Widget build(BuildContext context) {
-      return new DefaultTabController(
-        length: choices.length,
-        child: new Scaffold(
-          drawer: new MainDrawer(),
-          appBar: new AppBar(
-            elevation: 4.0,
-            title: new Text("Habitica"),
-            bottom: new TabBar(
-              // isScrollable: true,
-              tabs: choices.map((Choice choice) {
-                return new Tab(
-                  text: choice.title,
-                  icon: new Icon(choice.icon),
-                );
-              }).toList(),
-            ),
-            actions: <Widget>[
-              new IconButton(
-                onPressed: onLoggedOut,
-                icon: new Icon(Icons.exit_to_app),
-              )
-            ],
-          ),
-          body: new TabBarView(
-            children: choices.map((Choice choice) {
-              return new Container(
-                // padding: const EdgeInsets.all(16.0),
-                child: new HomePageBody(type: choice.type),
-              );
-            }).toList(),
-          ),
+      return new Scaffold(
+        drawer: new MainDrawer(),
+        floatingActionButton: (
+          !_enableAddTask ?
+          new FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                _enableAddTask = true;
+              });
+            },
+            child: new Icon(Icons.add),
+          ): null
         ),
+        body: new Stack(
+          children: <Widget>[
+            new NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  new SliverAppBar(
+                    // floating: true,
+                    // snap: true,
+                    pinned: true,
+                    elevation: 4.0,
+                    expandedHeight: 128.0,
+                    title: new Text("Habitica"),
+                    flexibleSpace: new FlexibleSpaceBar(
+                      background: new Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          new TabBar(
+                            controller: _tabController,
+                            tabs: choices.map((Choice choice) {
+                              return new Tab(
+                                text: choice.title,
+                                icon: new Icon(choice.icon),
+                              );
+                            }).toList(),
+                          ),
+                        ]
+                      ),
+                    ),
+                    actions: <Widget>[
+                      new PopupMenuButton<PopupActions>(
+                        onSelected: _handlePopupActions,
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupActions>>[
+                          new PopupMenuItem(
+                            enabled: !isLoading,
+                            value: PopupActions.refresh,
+                            child: new Text("Refresh"),
+                          ),
+                          new PopupMenuItem(
+                            value: PopupActions.exit,
+                            child: new Text("Exit"),
+                          ),
+                        ]
+                      ),
+                    ],
+                  ),
+                ];
+              },
+              body: new TabBarView(
+                controller: _tabController,
+                children:choices.map((Choice choice) =>
+                  new HomePageBody(
+                    tasks: tasks.where((task) => task.type == choice.type).toList(),
+                    key: new Key(choice.type)
+                  ),
+                ).toList(),
+              ),
+            ),
+            new Positioned(
+              bottom: 0.0,
+              left: 0.0,
+              child: new Container(
+                color: new Color(0xFFFFFFFF),
+                width: 360.0,
+                height: 48.0,
+                child: (
+                  _enableAddTask ?
+                  new AddTaskInput(
+                    onBackButton:() {
+                      setState(() {
+                        _enableAddTask = false;
+                      });
+                    },
+                    onSubmit: (task) => onNewTask(task, choices[_tabController.index].type)
+                  ) :
+                  null
+                ),
+              )
+            )
+          ],
+        ),
+      );
+    }
+}
+
+class HomePageBody extends StatelessWidget {
+  HomePageBody({Key key, this.tasks}):super(key:key);
+  final List<Task> tasks;
+
+  @override
+    Widget build(BuildContext context) {
+      return new RefreshIndicator(
+        onRefresh: () => getNetworkTasks(),
+        child: new ListView.builder(
+          shrinkWrap: true,
+          padding: new EdgeInsets.all(0.0),
+          itemBuilder: (_, int index) => new TaskContainer(
+            task: tasks[index],
+            key: new Key(tasks[index].id),
+          ),
+          itemCount: tasks.length,
+        )
       );
     }
 }
