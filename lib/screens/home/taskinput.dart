@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../sagas/tasks.dart';
+
 class AddTaskInput extends StatefulWidget {
-  AddTaskInput({Key key, this.onBackButton, this.onSubmit}): super(key: key);
+  AddTaskInput({Key key, this.onBackButton, this.type}): super(key: key);
 
   final void Function() onBackButton;
-  final void Function(String text) onSubmit;
+  final String type; 
 
   @override
   _AddTaskInputState createState() => new _AddTaskInputState();
@@ -50,7 +52,7 @@ class _AddTaskInputState extends State<AddTaskInput> implements WidgetsBindingOb
   }
 
   _onPressed() {
-    widget.onSubmit(_addTaskController.text);    
+    onNewTask(_addTaskController.text, widget.type);
     _addTaskController.clear();
     _unFocusKeyboard();
   }

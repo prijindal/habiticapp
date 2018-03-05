@@ -147,26 +147,25 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                 ).toList(),
               ),
             ),
-            new Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              child: new Container(
-                color: new Color(0xFFFFFFFF),
-                width: 360.0,
-                height: 48.0,
-                child: (
-                  _enableAddTask ?
-                  new AddTaskInput(
+            (
+            _enableAddTask ?
+              new Positioned(
+                bottom: 0.0,
+                left: 0.0,
+                child: new Container(
+                  color: new Color(0xFFFFFFFF),
+                  width: 360.0,
+                  height: 48.0,
+                  child: new AddTaskInput(
+                    type:choices[_tabController.index].type,
                     onBackButton:() {
                       setState(() {
                         _enableAddTask = false;
                       });
                     },
-                    onSubmit: (task) => onNewTask(task, choices[_tabController.index].type)
-                  ) :
-                  null
-                ),
-              )
+                  ),
+                )
+              ): new Container()
             )
           ],
         ),
