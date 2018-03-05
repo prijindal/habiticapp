@@ -38,4 +38,3 @@ gradle -v
 
 # run pub get in all the repo packages
 ./flutter/bin/flutter update-packages
-./flutter/bin/flutter packages get

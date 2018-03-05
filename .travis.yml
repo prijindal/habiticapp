@@ -31,6 +31,7 @@ cache:
 before_script:
   - git clone https://github.com/flutter/flutter.git -b beta --depth 1
   - ./flutter/bin/flutter doctor -v
+  - ./flutter/bin/flutter packages get
   - gem install coveralls-lcov
 
 script:
