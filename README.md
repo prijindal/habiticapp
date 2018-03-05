@@ -1,8 +1,9 @@
 # Habitter
 
-A new Flutter project.
+A Client for [Habitica Task Manager](https://habitica.com) built with [Flutter](https://flutter.io)
 
 ## Getting Started
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+```
+flutter run --release
+```
