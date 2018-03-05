@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-HUB_VERSION="2.2.9"
+GITHUB_RELEASE_VERSION="0.7.2"
 
 export PATH="$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH"
 
@@ -12,9 +12,10 @@ if [ "$SHARD" = "build_and_deploy" ]; then
     flutter build apk --release
     echo "Android Application built"
     echo "Deploying to Github"
-    wget "https://github.com/github/hub/releases/download/v$HUB_VERSION/hub-linux-amd64-$HUB_VERSION.tgz"
-    tar -xf "hub-linux-amd64-$HUB_VERSION.tgz"
-    ./hub-linux-amd64-$HUB_VERSION/bin/hub release create -p -a build/app/outputs/apk/release/app-release.apk -m "Pre Release $(date)" "android"
+    wget "https://github.com/aktau/github-release/releases/download/v$GITHUB_RELEASE_VERSION/linux-amd64-github-release.tar.bz2"
+    mkdir github-release
+    ar xvjf linux-amd64-github-release.tar.bz2 -C github-release
+    ./github-release/bin/linux/amd64/github-release
     echo "Deployed Succesfully"
     # Add to github release
   elif [ "$TRAVIS_OS_NAME" = "osx" ]; then

@@ -13,7 +13,6 @@ matrix:
     env: SHARD=analyze
 
 sudo: false
-filter_secrets: false
 
 addons:
   apt:
