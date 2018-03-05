@@ -41,12 +41,3 @@ before_script:
 script:
   - ulimit -S -n 2048  
   - ./ci/script.sh
-
-deploy:
-  provider: releases
-  api_key:
-    secure: A3ntOk2qcKgsU1SKXztpzPg5i4iTfwgczbtoDeDxQgKBDi2mC4WRzkD/mb9wMOPumRstRSBZVjieqNb2KijAReCLrd9EodbdpVyvKFiIjYOlPvhF9OktL/0HDjyd57m+I39vg7INOTnN+VgXc8AcJXOp9hIqIKsiXILU702gnCPq6G2cPGTidAqu1lYPT4eAf0bKKOYWqYpSoq7j8UJTRMS9pTwYDig8BIUgY4+CUn4uLJh9Wc0CjYTlx0QzfBduFYJrehgGH8BuExa3xa0neEh9fmuIvdUXSR/47xdtX+FjPKDhRcWhp61IcFtPV3QCN44k4YGcWVm4yzzcw3iuLN1RPSk8hbG/vtWXQfneqMs1OWoKyeBudIDxp5YYVDm2GzV0QgxdkYX1ZDpLJapOyMwuMNTIPq1Ftn0ASW01sqC519ziFOqFENmliZqGltdZtneDgclAPLrLTwl43VU3V8VKtTeQtBCINXxv6WL/U83w5qd9wUBAX2R+VHGfJZHcqdEmBGR/qfoBMUxIIXiynaQsV5RaYyGdHyG3RI1E/bK5t1TU6zqiW+WdkR5T0yZ/d1fOHAjNMXMCP9qc/AmdfUVPpPz6Dqdfm3QI961uQdxkLpaBUnva/I7be6JW2KYCjXDCSztzpJ1xihft3kUeO5Juj2OaKO0kfLTxUJ4bedY=
-  file: build/app/outputs/apk/release/app-release.apk
-  overwrite: true
-  on:
-    condition: $TRAVIS_OS_NAME = linux  && $SHARD = build_and_deploy
