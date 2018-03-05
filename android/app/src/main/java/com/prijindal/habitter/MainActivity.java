@@ -1,4 +1,4 @@
-package com.example.habiticapp;
+package com.prijindal.habitter;
 
 import android.os.Bundle;
 
