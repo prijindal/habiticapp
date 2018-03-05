@@ -15,5 +15,5 @@ if [ "$SHARD" = "build_and_deploy" ]; then
     echo "iOS Flutter Gallery built"
   fi
 else
-  dartanalyzer lib
+  ./flutter/bin/cache/dart-sdk/bin/dartanalyzer lib
 fi
