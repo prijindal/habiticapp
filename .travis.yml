@@ -35,7 +35,7 @@ before_script:
 
 script:
   - ulimit -S -n 2048
-  - ./cl/analyze.sh
+  - ./ci/analyze.sh
   - ./flutter/bin/flutter test --coverage
 
 after_script:
