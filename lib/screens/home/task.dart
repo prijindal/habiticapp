@@ -57,22 +57,24 @@ class _TaskContainerState extends State<TaskContainer> {
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
-      return new Container(
+      return new Material(
         color: (
           _isSelected ?
           Colors.black26:
           null
         ),
-        child: new ListTile(
-          enabled: true,
-          onTap: (
-            _isSelected ?
-            _toggleSelected :
-            () => _openTaskPage(context)
+        child: new InkWell(
+          child: new ListTile(
+            enabled: true,
+            onTap: (
+              _isSelected ?
+              _toggleSelected :
+              () => _openTaskPage(context)
+            ),
+            onLongPress: _toggleSelected,
+            selected: _isSelected,
+            title: _buildTaskComponent(),
           ),
-          onLongPress: _toggleSelected,
-          selected: _isSelected,
-          title: _buildTaskComponent(),
         )
       );
     }

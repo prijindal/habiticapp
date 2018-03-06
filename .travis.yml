@@ -28,15 +28,15 @@ cache:
 
 # Testing
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+  - git clone https://github.com/flutter/flutter.git -b master --depth 1
   - ./flutter/bin/flutter doctor -v
   - ./flutter/bin/flutter packages get
   - gem install coveralls-lcov
 
 script:
   - ulimit -S -n 2048
-  - ./flutter/bin/flutter analyze lib/ test/
-  - ./flutter/bin/flutter test --coverage
+  - ./flutter/bin/flutter analyze --preview-dart-2 lib/ test/
+  - ./flutter/bin/flutter test --preview-dart-2 --coverage
 
 after_success:
   - coveralls-lcov coverage/lcov.info  

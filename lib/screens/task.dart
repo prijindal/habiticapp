@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'home/task.dart';
 import '../models/task.dart';
 import '../helpers/markdown.dart';
 
@@ -23,6 +24,9 @@ class _TaskScreenState extends State<TaskScreen> {
       return new Scaffold(
         appBar: new AppBar(
           title: new Text(convertEmojis(task.text)),
+        ),
+        body: new TaskContainer(
+          task: task,
         ),
       );
     }
