@@ -30,7 +30,13 @@ ThemeData mainTheme = new ThemeData(
         new TextStyle(
           fontSize: 16.0
         )
-      )
+      ),
+      subhead: lightTheme.textTheme.body1.merge(
+        new TextStyle(
+          fontSize: 14.0,
+          color: Colors.black87
+        )
+      ),
     )
   )
 );

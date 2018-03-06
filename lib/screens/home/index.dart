@@ -128,7 +128,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                           ),
                           new PopupMenuItem(
                             value: PopupActions.exit,
-                            child: new Text("Exit"),
+                            child: new Text("Logout"),
                           ),
                         ]
                       ),
@@ -153,7 +153,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                 left: 0.0,
                 child: new Container(
                   color: new Color(0xFFFFFFFF),
-                  width: 360.0,
+                  width: MediaQuery.of(context).size.width,
                   height: 48.0,
                   child: new AddTaskInput(
                     type:choices[_tabController.index].type,
