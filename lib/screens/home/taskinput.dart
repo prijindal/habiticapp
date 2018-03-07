@@ -60,44 +60,46 @@ class _AddTaskInputState extends State<AddTaskInput> with WidgetsBindingObserver
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
-      IconTheme iconTheme = new IconTheme(
-        data: new IconThemeData(
-          color: Theme.of(context).accentColor
-        ),
-        child: new Container(
-          child: new Row(
-            children: <Widget>[
-              new Flexible(
-                child: new Container(
-                  child: new TextField(
-                    controller: _addTaskController,
-                    onChanged: (String text) {
-                      setState(() {
-                        _isComposing = text.length > 0;
-                      });
-                    },
-                    focusNode: _addTaskFocusNode,
-                    decoration: new InputDecoration(
-                      contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 16.0),
-                      hintText: "Add a ${widget.type}",
+      return new Material(
+        elevation: 16.0,
+        child: new IconTheme(
+          data: new IconThemeData(
+            color: Theme.of(context).accentColor
+          ),
+          child: new Container(
+            child: new Row(
+              children: <Widget>[
+                new Flexible(
+                  child: new Container(
+                    child: new TextField(
+                      controller: _addTaskController,
+                      onChanged: (String text) {
+                        setState(() {
+                          _isComposing = text.length > 0;
+                        });
+                      },
+                      focusNode: _addTaskFocusNode,
+                      decoration: new InputDecoration(
+                        contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 16.0),
+                        hintText: "Add a ${widget.type}",
+                      ),
                     ),
                   ),
                 ),
-              ),
-              new Container(
-                child: new IconButton(
-                  onPressed: (
-                    _isComposing ?
-                    _onPressed:
-                    null
+                new Container(
+                  child: new IconButton(
+                    onPressed: (
+                      _isComposing ?
+                      _onPressed:
+                      null
+                    ),
+                    icon: new Icon(Icons.send),
                   ),
-                  icon: new Icon(Icons.send),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       );
-      return iconTheme;
     }
 }

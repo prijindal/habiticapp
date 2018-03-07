@@ -258,11 +258,6 @@ class MarkDownTaskText  extends StatelessWidget {
   @override
     Widget build(BuildContext context) {
       return new Container(
-        width: 240.0,
-        height: textStyle.height,
-        constraints: new BoxConstraints(
-          maxWidth: 240.0
-        ),
         child: new MarkdownBody(
           data: convertEmojis(text),
           styleSheet: new MarkdownStyleSheet.fromTheme(mainTheme),

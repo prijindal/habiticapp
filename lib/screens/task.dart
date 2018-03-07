@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'home/task.dart';
 import '../models/task.dart';
 
-import '../helpers/theme.dart';
-import '../helpers/savedlogin.dart';
-import '../api/tasks.dart';
+// import '../helpers/theme.dart';
+// import '../helpers/savedlogin.dart';
+// import '../api/tasks.dart';
 
 class TaskPageRoute<T> extends MaterialPageRoute<T> {
   TaskPageRoute({ WidgetBuilder builder })
@@ -49,7 +49,6 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
     void initState() {
       super.initState();
-      getNetworkTask();
       notesEditingController.text = task.notes;
       textEditingController.text = task.text;
       setState(() {
@@ -75,19 +74,6 @@ class _TaskScreenState extends State<TaskScreen> {
       maxLines = 2;
     }
     return maxLines;
-  }
-
-  getNetworkTask() async {
-    try {
-      var loginInformation = await getLoginInformation();
-      Task newTask = await getTask(task.id, loginInformation);
-      print(newTask);
-      setState(() {
-        task = newTask;
-      });
-    } catch(e) {
-      print(e);
-    }
   }
 
   _textOnChanged() {
