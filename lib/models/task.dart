@@ -13,12 +13,31 @@ final String columnCompleted = "completed";
 final String columnCounterUp = "counterUp";
 final String columnCounterDown = "counterDown";
 final String columnStreak = "streak";
+final String columnPriority = "priority";
 
 enum Difficulty {
   Trivial,
   Easy,
   Medium,
   Hard
+}
+
+Map<Difficulty, double> diffToPriority = {
+  Difficulty.Trivial: 0.1,
+  Difficulty.Easy: 1.0,
+  Difficulty.Medium: 1.5,
+  Difficulty.Hard: 2.0
+};
+
+Difficulty priorityToDiff(double priority) {
+  for (var key in Difficulty.values) {
+    if (diffToPriority.containsKey(key)) {
+      if(diffToPriority[key] == priority) {
+        return key;
+      }
+    }
+  }
+  return Difficulty.Trivial;
 }
 
 class Task extends BaseObject {
@@ -31,6 +50,7 @@ class Task extends BaseObject {
     date = getDefaultMap(map, columnDate);
 
     notes = getDefaultMap(map, columnnotes);
+    difficulty = priorityToDiff(getDefaultMap(map, columnPriority));
 
     up = getDefaultMap(map, columnUp, false);
     down = getDefaultMap(map, columnDown, false);
@@ -48,6 +68,7 @@ class Task extends BaseObject {
       columnText: text,
       columnType: type,
     };
+    map = checkNullAndAdd(map, columnPriority, diffToPriority[difficulty]);
     map = checkNullAndAdd(map, columnnotes, notes);
     map = checkNullAndAdd(map, columnDate, date);
     map = checkNullAndAdd(map, columnUp, up);
@@ -68,6 +89,7 @@ class Task extends BaseObject {
   int counterDown;
   int counterUp;
   int streak;
+  Difficulty difficulty;
 }
 
 class TaskProvider extends ListProvider<Task> {
