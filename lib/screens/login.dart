@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -5,6 +6,34 @@ import '../api/login.dart';
 import '../api/login.class.dart';
 
 import '../helpers/focusnode.dart';
+import '../helpers/theme.dart';
+
+class LoginScreen extends StatelessWidget {
+
+  LoginScreen({ Key key, this.onLoggedIn }): super(key: key);
+
+  @required
+  final ValueChanged<LoginResponse> onLoggedIn;
+
+  _onGenerateRoute(RouteSettings route) {
+    if(route.name == "/") {
+      return new MaterialPageRoute(
+        builder: (context) => new LoginPage(onLoggedIn: onLoggedIn)
+      );
+    } else {
+      return null;
+    }
+  }
+  
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return new MaterialApp(
+        theme: mainTheme,
+        onGenerateRoute: _onGenerateRoute  
+      );
+    }
+}
 
 class LoginPage extends StatefulWidget {
   LoginPage({ Key key, this.onLoggedIn }): super(key: key);
@@ -106,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

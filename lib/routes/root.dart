@@ -87,7 +87,7 @@ class _RootHandlerState extends State<RootHandler> {
                 ? new App(
                   onLoggedOut: _onLoggedOut,
                 )
-                : new LoginPage(
+                : new LoginScreen(
                   onLoggedIn: _onLoggedIn
                 )),
         )
@@ -99,10 +99,6 @@ class _RootHandlerState extends State<RootHandler> {
 class RootApplication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Habitica Client',
-      theme: mainTheme,
-      home: new RootHandler(),
-    );
+    return new RootHandler();
   }
 }

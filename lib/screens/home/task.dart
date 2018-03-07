@@ -8,6 +8,7 @@ import '../../helpers/markdown.dart';
 import '../../helpers/theme.dart';
 
 import '../task.dart';
+import '../../libraries/markdown/flutter_markdown.dart';
 
 class TaskContainer extends StatefulWidget {
   TaskContainer({Key key, this.task}):super(key: key);
@@ -36,6 +37,7 @@ class _TaskContainerState extends State<TaskContainer> {
         fullscreenDialog: true
       )
     );
+    // Navigator.of(context).pushNamed('/tasks/${task.id}');
   }
 
   _plusOneTask() {
@@ -261,12 +263,13 @@ class MarkDownTaskText  extends StatelessWidget {
           color: Colors.transparent,
           child: new Container(
             width: 240.0,
-            height: textStyle.fontSize,
+            height: textStyle.height,
             constraints: new BoxConstraints(
               maxWidth: 240.0
             ),
-            child: new Text(
-              convertEmojis(text)
+            child: new MarkdownBody(
+              data: convertEmojis(text),
+              styleSheet: new MarkdownStyleSheet.fromTheme(mainTheme),
             ),
           ),
         ),
