@@ -35,9 +35,7 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  _TaskScreenState({this.task}):super()  {
-    this.task = new Task(task.toMap());
-  }
+  _TaskScreenState({this.task}):super();
 
   @required
   Task task;
@@ -130,14 +128,13 @@ class _TaskScreenState extends State<TaskScreen> {
         ),
         body: new ListView(
           children: <Widget>[
-            new ListTile(
-              title: new Container(
-                margin: const EdgeInsets.only(top: 5.0),
-                child: new MarkDownTaskText(
-                  text: (task.text != null ? task.text: ""),
-                  textStyle: mainTheme.textTheme.body1
-                ),
-              )
+            new Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: new TaskContainer(
+                task: task,
+                // text: (task.text != null ? task.text: ""),
+                // textStyle: mainTheme.textTheme.body1
+              ),
             ),
             new ListTile(
               title: new TextField(
@@ -162,7 +159,11 @@ class _TaskScreenState extends State<TaskScreen> {
               ),
             ),
             new DifficultySelect(
-              onChanged: (diff) {},
+              onChanged: (diff) {
+                setState(() {
+                  task.difficulty = diff;
+                });
+              },
               value: task.difficulty,
             )
           ],

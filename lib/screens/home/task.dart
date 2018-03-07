@@ -58,24 +58,27 @@ class _TaskContainerState extends State<TaskContainer> {
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
-      return new Material(
-        color: (
-          _isSelected ?
-          Colors.black26:
-          null
-        ),
-        child: new InkWell(
-          child: new ListTile(
-            enabled: true,
-            onTap: (
-              _isSelected ?
-              _toggleSelected :
-              () => _openTaskPage(context)
-            ),
-            onLongPress: _toggleSelected,
-            selected: _isSelected,
-            title: _buildTaskComponent(),
+      return new Hero(
+        tag: task,
+        child: new Material(
+          color: (
+            _isSelected ?
+            Colors.black26:
+            null
           ),
+          child: new InkWell(
+            child: new ListTile(
+              enabled: true,
+              onTap: (
+                _isSelected ?
+                _toggleSelected :
+                () => _openTaskPage(context)
+              ),
+              onLongPress: _toggleSelected,
+              selected: _isSelected,
+              title: _buildTaskComponent(),
+            ),
+          )
         )
       );
     }
@@ -254,23 +257,15 @@ class MarkDownTaskText  extends StatelessWidget {
   final TextStyle textStyle;
   @override
     Widget build(BuildContext context) {
-      // TODO: implement build
-      return new Hero(
-        tag: text,
-        child: new Material(
-          textStyle: textStyle,
-          color: Colors.transparent,
-          child: new Container(
-            width: 240.0,
-            height: textStyle.height,
-            constraints: new BoxConstraints(
-              maxWidth: 240.0
-            ),
-            child: new MarkdownBody(
-              data: convertEmojis(text),
-              styleSheet: new MarkdownStyleSheet.fromTheme(mainTheme),
-            ),
-          ),
+      return new Container(
+        width: 240.0,
+        height: textStyle.height,
+        constraints: new BoxConstraints(
+          maxWidth: 240.0
+        ),
+        child: new MarkdownBody(
+          data: convertEmojis(text),
+          styleSheet: new MarkdownStyleSheet.fromTheme(mainTheme),
         ),
       );
     }
