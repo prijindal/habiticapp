@@ -79,7 +79,7 @@ class _AddTaskInputState extends State<AddTaskInput> with WidgetsBindingObserver
                     focusNode: _addTaskFocusNode,
                     decoration: new InputDecoration(
                       contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 16.0),
-                      hintText: "Add a habit",
+                      hintText: "Add a ${widget.type}",
                     ),
                   ),
                 ),

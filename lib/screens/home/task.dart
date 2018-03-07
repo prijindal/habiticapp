@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:simple_moment/simple_moment.dart';
 
 import '../../models/task.dart';
-import '../../libraries/markdown/flutter_markdown.dart';
 import '../../helpers/markdown.dart';
 
 
@@ -34,6 +33,7 @@ class _TaskContainerState extends State<TaskContainer> {
     Navigator.of(context).push(
       new MaterialPageRoute<Null>(
         builder: (BuildContext context) => new TaskScreen(task: task),
+        fullscreenDialog: true
       )
     );
   }
@@ -127,9 +127,6 @@ class DailyTask extends StatelessWidget {
           new Flexible(
             child: new TaskText(
               task: task,
-              bottomWidget: new BottomRowDailys(
-                task: task,
-              ),
             ),
           )
         ],
@@ -160,9 +157,6 @@ class TodoTask extends StatelessWidget {
           new Flexible(
             child: new TaskText(
               task: task,
-              bottomWidget: new BottomRowTasks(
-                task: task,
-              ),
             ),
           )
         ],
@@ -194,7 +188,6 @@ class HabitTask extends StatelessWidget {
           new Flexible(
             child: new TaskText(
               task: task,
-              bottomWidget: new BottomRowHabits(task: task)
             ),
           ),
           new IconButton(
@@ -207,10 +200,23 @@ class HabitTask extends StatelessWidget {
 }
 
 class TaskText extends StatelessWidget {
-  TaskText({Key key, this.task, this.bottomWidget}):super(key: key);
+  TaskText({Key key, this.task}):super(key: key);
 
   final Task task;
-  final StatelessWidget bottomWidget;
+
+  StatelessWidget _buildBottomWidget() {
+    switch (task.type) {
+      case "todo":
+        return new BottomRowTasks(task: task);
+      case "habit":
+        return new BottomRowHabits(task: task);
+        break;
+      case "daily":
+        return new BottomRowDailys(task: task);
+      default:
+        return new Container();
+    }
+  }
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
@@ -220,20 +226,47 @@ class TaskText extends StatelessWidget {
         ),
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             new Container(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: new MarkdownBody(
-                styleSheet: new MarkdownStyleSheet.fromTheme(mainTheme),
-                data: convertEmojis(task.text),
+              padding: const EdgeInsets.only(top: 8.0),
+              child: new MarkDownTaskText(
+                text: task.text,
+                textStyle: mainTheme.textTheme.body1
               ),
             ),
             new Container(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               alignment: Alignment.bottomLeft,
-              child: bottomWidget
+              child: _buildBottomWidget()
             )
           ],
+        ),
+      );
+    }
+}
+
+class MarkDownTaskText  extends StatelessWidget {
+  MarkDownTaskText({Key key, this.text, this.textStyle}):super(key: key);
+
+  final String text;
+  final TextStyle textStyle;
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return new Hero(
+        tag: text,
+        child: new Material(
+          textStyle: textStyle,
+          color: Colors.transparent,
+          child: new Container(
+            constraints: new BoxConstraints(
+              maxWidth: 240.0
+            ),
+            child: new Text(
+              convertEmojis(text)
+            ),
+          ),
         ),
       );
     }
