@@ -11,8 +11,6 @@ import '../api/login.class.dart';
 import '../sagas/user.dart';
 import '../sagas/tasks.dart';
 
-import '../helpers/theme.dart';
-
 class RootApplication extends StatefulWidget {
   RootApplication({this.initialScreen, Key key}):super(key: key);
   // This widget is the root of your application.

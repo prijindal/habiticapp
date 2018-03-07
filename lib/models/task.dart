@@ -8,24 +8,18 @@ final String columnType = "type";
 final String columnUp = "up";
 final String columnDown = "down";
 final String columnDate = "date";
+final String columnnotes = "notes";
 final String columnCompleted = "completed";
 final String columnCounterUp = "counterUp";
 final String columnCounterDown = "counterDown";
 final String columnStreak = "streak";
 
-final List<String> columns = [
-  columnId,
-  columnUserId,
-  columnText,
-  columnType,
-  columnUp,
-  columnDown,
-  columnDate,
-  columnCompleted,
-  columnCounterUp,
-  columnCounterDown,
-  columnStreak,
-];
+enum Difficulty {
+  Trivial,
+  Easy,
+  Medium,
+  Hard
+}
 
 class Task extends BaseObject {
   @override
@@ -35,6 +29,8 @@ class Task extends BaseObject {
     text = getDefaultMap(map, columnText);
     type = getDefaultMap(map, columnType);
     date = getDefaultMap(map, columnDate);
+
+    notes = getDefaultMap(map, columnnotes);
 
     up = getDefaultMap(map, columnUp, false);
     down = getDefaultMap(map, columnDown, false);
@@ -52,6 +48,7 @@ class Task extends BaseObject {
       columnText: text,
       columnType: type,
     };
+    map = checkNullAndAdd(map, columnnotes, notes);
     map = checkNullAndAdd(map, columnDate, date);
     map = checkNullAndAdd(map, columnUp, up);
     map = checkNullAndAdd(map, columnDown, down);
@@ -63,6 +60,7 @@ class Task extends BaseObject {
   String userId;
   String text;
   String type;
+  String notes;
   bool up;
   bool down;
   String date;

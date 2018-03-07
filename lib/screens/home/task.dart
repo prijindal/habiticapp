@@ -10,7 +10,7 @@ import '../../helpers/theme.dart';
 import '../task.dart';
 import '../../libraries/markdown/flutter_markdown.dart';
 
-class TaskContainer extends StatefulWidget {
+class TaskContainer extends StatefulWidget{
   TaskContainer({Key key, this.task}):super(key: key);
   final Task task;
 
@@ -32,9 +32,8 @@ class _TaskContainerState extends State<TaskContainer> {
 
   _openTaskPage(BuildContext context) {
     Navigator.of(context).push(
-      new MaterialPageRoute<Null>(
+      new TaskPageRoute<Null>(
         builder: (BuildContext context) => new TaskScreen(task: task),
-        fullscreenDialog: true
       )
     );
     // Navigator.of(context).pushNamed('/tasks/${task.id}');

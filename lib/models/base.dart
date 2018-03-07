@@ -18,7 +18,9 @@ abstract class BaseObject {
     String toString() {
       return toMap().toString();
     }
-  
+  toJson() {
+    return toMap();
+  }
   BaseObject(Map<String, dynamic> map);
   Map<String, dynamic> toMap();
 }
