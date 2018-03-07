@@ -260,6 +260,7 @@ class MarkDownTaskText  extends StatelessWidget {
           textStyle: textStyle,
           color: Colors.transparent,
           child: new Container(
+            height: textStyle.fontSize,
             constraints: new BoxConstraints(
               maxWidth: 240.0
             ),
