@@ -13,14 +13,16 @@ import '../sagas/tasks.dart';
 
 import '../helpers/theme.dart';
 
-class RootHandler extends StatefulWidget {
+class RootApplication extends StatefulWidget {
+  RootApplication({this.initialScreen, Key key}):super(key: key);
   // This widget is the root of your application.
-
+  
+  final StatefulWidget initialScreen;
   @override
   _RootHandlerState createState() => new _RootHandlerState();
 }
 
-class _RootHandlerState extends State<RootHandler> {
+class _RootHandlerState extends State<RootApplication> {
   bool _isLoading = true;
   bool _isLoggedIn = false;
 
@@ -76,6 +78,15 @@ class _RootHandlerState extends State<RootHandler> {
     clearTasks();
   }
 
+  _buildApp() {
+    if (widget.initialScreen != null) {
+      return widget.initialScreen;
+    }
+    return new App(
+      onLoggedOut: _onLoggedOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -84,21 +95,12 @@ class _RootHandlerState extends State<RootHandler> {
         new LoadingScreen() :
         new Container(
           child: (_isLoggedIn
-                ? new App(
-                  onLoggedOut: _onLoggedOut,
-                )
+                ? _buildApp()
                 : new LoginScreen(
                   onLoggedIn: _onLoggedIn
                 )),
         )
       )
     );
-  }
-}
-
-class RootApplication extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new RootHandler();
   }
 }
