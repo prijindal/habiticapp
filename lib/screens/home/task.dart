@@ -41,6 +41,7 @@ class _TaskContainerState extends State<TaskContainer> {
         builder: (BuildContext context) => new TaskScreen(task: task),
       )
     );
+    if(updatedTask == null) return;
     setState(() {
       task = updatedTask;
     });

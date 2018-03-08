@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:meta/meta.dart';
 import 'package:flutter/material.dart'; 
 
 import '../../sagas/tasks.dart';
@@ -39,17 +41,20 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   HomePageState({ this.onLoggedOut });  
   final String title = "Home Page";
   final void Function() onLoggedOut;
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   
   bool _enableAddTask = false;
   List<Task> tasks;
-  bool isLoading = tasksstore.state.isLoading;
+  bool isLoading = false;
   TabController _tabController;
 
   @override
   initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: choices.length);
-    tasks = tasksstore.state.tasks;     
+    tasks = tasksstore.state.tasks;
+    isLoading = tasksstore.state.isLoading;
     tasksstore.onChange.listen((state) {
       if(mounted) {
         setState(() {
@@ -60,12 +65,13 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     });
     getOfflineTasks();
     getNetworkTasks();
+    // new Timer(new Duration(), () => _refreshIndicatorKey.currentState.show());
   }
 
   void _handlePopupActions(PopupActions action) {
     switch (action) {
       case PopupActions.refresh:
-        getNetworkTasks();
+        _refreshIndicatorKey.currentState.show();
         break;
       case PopupActions.exit:
         onLoggedOut();
@@ -74,11 +80,11 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     }
   }
 
-  List<Task> getTasks() {
+  List<Task> getTasks(String type) {
     if(tasks == null) {
       return [];
     }
-    return tasks;
+    return tasks.where((task) => task.type == type).toList();
   }
 
   @override
@@ -143,14 +149,18 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   ),
                 ];
               },
-              body: new TabBarView(
-                controller: _tabController,
-                children:choices.map((Choice choice) =>
-                  new HomePageBody(
-                    tasks: getTasks().where((task) => task.type == choice.type).toList(),
-                    key: new Key(choice.type)
-                  ),
-                ).toList(),
+              body: new RefreshIndicator(
+                key: _refreshIndicatorKey,
+                onRefresh: () => getNetworkTasks(),
+                child: new TabBarView(
+                  controller: _tabController,
+                  children: choices.map((Choice choice) =>
+                    new HomePageBody(
+                      tasks: getTasks(choice.type),
+                      key: new Key(choice.type)
+                    )
+                  ).toList(),
+                ),
               ),
             ),
             (
@@ -181,6 +191,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 
 class HomePageBody extends StatelessWidget {
   HomePageBody({Key key, this.tasks}):super(key:key);
+  
+  @required
   final List<Task> tasks;
 
   @override
