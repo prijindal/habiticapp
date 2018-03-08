@@ -14,6 +14,7 @@ final String columnCounterUp = "counterUp";
 final String columnCounterDown = "counterDown";
 final String columnStreak = "streak";
 final String columnPriority = "priority";
+final String columnTags = "tags";
 
 enum Difficulty {
   Trivial,
@@ -51,6 +52,7 @@ class Task extends BaseObject {
 
     notes = getDefaultMap(map, columnnotes);
     difficulty = priorityToDiff(getDefaultMap(map, columnPriority));
+    tags = getDefaultMap(map, columnTags);
 
     up = getDefaultMap(map, columnUp, false);
     down = getDefaultMap(map, columnDown, false);
@@ -68,6 +70,7 @@ class Task extends BaseObject {
       columnText: text,
       columnType: type,
     };
+    map = checkNullAndAdd(map, columnTags, tags);
     map = checkNullAndAdd(map, columnPriority, diffToPriority[difficulty]);
     map = checkNullAndAdd(map, columnnotes, notes);
     map = checkNullAndAdd(map, columnDate, date);
@@ -90,6 +93,7 @@ class Task extends BaseObject {
   int counterUp;
   int streak;
   Difficulty difficulty;
+  List<String> tags;
 }
 
 class TaskProvider extends ListProvider<Task> {

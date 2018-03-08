@@ -7,7 +7,7 @@ import '../../helpers/markdown.dart';
 
 import '../../helpers/theme.dart';
 
-import '../task.dart';
+import '../task/index.dart';
 import '../../libraries/markdown/flutter_markdown.dart';
 
 class TaskContainer extends StatefulWidget{

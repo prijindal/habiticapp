@@ -1,5 +1,6 @@
 import 'base.dart';
 import 'provider.dart';
+import 'tag.dart';
 
 class Local extends BaseObject{
   String email;
@@ -52,11 +53,13 @@ class User extends BaseObject{
   UserAuth auth;
   UserProfile profile;
   String id;
+  List<Tag> tags;
 
   User(Map<String,dynamic> map):super(map) {
     auth = new UserAuth(getDefaultMap(map, "auth"));
     profile = new UserProfile(getDefaultMap(map, "profile"));
     id = getDefaultMap(map, "id");
+    tags = getDefaultMap(map, "tags").map((tag) => new Tag(tag)).toList();
   }
 
   @override
@@ -64,7 +67,8 @@ class User extends BaseObject{
       Map map = {
         "auth": auth.toMap(),
         "profile": profile.toMap(),
-        "id": id
+        "id": id,
+        "tags": tags.map((tag) => tag.toMap()).toList()
       };
       // TODO: implement toMap
       return map;

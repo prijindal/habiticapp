@@ -3,8 +3,10 @@ import 'package:meta/meta.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
-import 'home/task.dart';
-import '../models/task.dart';
+import '../home/task.dart';
+import '../../models/task.dart';
+import '../../models/tag.dart';
+import '../../store.dart';
 
 // import '../helpers/theme.dart';
 // import '../helpers/savedlogin.dart';
@@ -35,7 +37,9 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  _TaskScreenState({this.task}):super();
+  _TaskScreenState({this.task}):super() {
+    task = new Task(this.task.toMap());
+  }
 
   @required
   Task task;
@@ -96,6 +100,23 @@ class _TaskScreenState extends State<TaskScreen> {
     Navigator.of(context).pop();
   }
 
+  _onChanged(Tag changedTag, bool newValue) {
+    for(var i = 0;i < userstore.state.user.tags.length; i+=1) {
+      if(userstore.state.user.tags[i].id == changedTag.id) {
+        if(newValue) {
+          // add to task.tags based on newValue
+          setState(() {
+            task.tags.add(changedTag.id);
+          });
+        } else {
+          setState(() {
+            task.tags.remove(changedTag.id);
+          });
+        }
+      }
+    }
+  }
+
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
@@ -117,7 +138,7 @@ class _TaskScreenState extends State<TaskScreen> {
             new Container(
               margin: const EdgeInsets.only(top: 5.0),
               child: new TaskContainer(
-                task: task,
+                task: widget.task,
                 // text: (task.text != null ? task.text: ""),
                 // textStyle: mainTheme.textTheme.body1
               ),
@@ -151,6 +172,10 @@ class _TaskScreenState extends State<TaskScreen> {
                 });
               },
               value: task.difficulty,
+            ),
+            new TagsSelect(
+              task: task,
+              onChanged: _onChanged,
             )
           ],
         ),
@@ -182,6 +207,37 @@ class DifficultySelect extends StatelessWidget {
               )).toList()
           ,
         ),
+      );
+    }
+}
+
+
+class TagsSelect extends StatelessWidget {
+  TagsSelect({ Key key, this.task, this.onChanged }): super(key: key);
+
+  @required
+  final void Function(Tag, bool) onChanged;
+
+  @required
+  final Task task;
+
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return new Column(
+        children: <Widget>[
+          new ListTile(
+            subtitle: new Text("Tags"),
+          ),
+          new Column(
+            children: userstore.state.user.tags.map((Tag tag) => 
+              new CheckboxListTile(
+                onChanged: (bool newValue) => onChanged(tag, newValue),
+                value: task.tags.contains(tag.id),
+                title: new Text(tag.name)
+              )).toList(),
+          )
+        ]
       );
     }
 }

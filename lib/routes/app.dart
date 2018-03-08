@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/home/index.dart';
-import '../screens/task.dart';
+import '../screens/task/index.dart';
 
 import '../helpers/theme.dart';
 import '../observers/route.dart';
