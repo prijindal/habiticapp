@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:flutter/material.dart'; 
 
 import '../../sagas/tasks.dart';
@@ -6,7 +5,7 @@ import '../../components/drawer.dart';
 // import 'body.dart';
 
 import 'taskinput.dart';
-import 'task.dart';
+import 'body.dart';
 
 import '../../models/task.dart';
 
@@ -29,17 +28,17 @@ const List<Choice> choices = const <Choice>[
 
 enum PopupActions { refresh, exit }
 
+HomePageState homePageState = new HomePageState();
+
 class HomePage extends StatefulWidget {
   HomePage({ Key key, this.onLoggedOut }): super(key: key);
   final void Function() onLoggedOut;
   @override
-  HomePageState createState() => new HomePageState(onLoggedOut: onLoggedOut);
+  HomePageState createState() => homePageState;
 }
 
 class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  HomePageState({ this.onLoggedOut });  
   final String title = "Home Page";
-  final void Function() onLoggedOut;
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   
@@ -73,7 +72,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
         _refreshIndicatorKey.currentState.show();
         break;
       case PopupActions.exit:
-        onLoggedOut();
+        widget.onLoggedOut();
         break;
       default:
     }
@@ -188,25 +187,3 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     }
 }
 
-class HomePageBody extends StatelessWidget {
-  HomePageBody({Key key, this.tasks}):super(key:key);
-  
-  @required
-  final List<Task> tasks;
-
-  @override
-    Widget build(BuildContext context) {
-      return new RefreshIndicator(
-        onRefresh: () => getNetworkTasks(),
-        child: new ListView.builder(
-          shrinkWrap: true,
-          padding: new EdgeInsets.all(0.0),
-          itemBuilder: (_, int index) => new TaskContainer(
-            task: tasks[index],
-            key: new Key(tasks[index].id),
-          ),
-          itemCount: tasks.length,
-        )
-      );
-    }
-}

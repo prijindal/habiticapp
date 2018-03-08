@@ -211,9 +211,8 @@ class TodoTask extends StatelessWidget {
       // TODO: implement build
       return new Row(
         children: <Widget>[
-          new Radio(
-            groupValue: task.completed,
-            value: true,
+          new Checkbox(
+            value: task.completed,
             onChanged: onTodoToggled,
           ),
           new Flexible(
