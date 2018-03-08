@@ -8,6 +8,9 @@ import '../../models/task.dart';
 import '../../models/tag.dart';
 import '../../store.dart';
 
+import 'difficultyselect.dart';
+import 'tagselect.dart';
+
 // import '../helpers/theme.dart';
 // import '../helpers/savedlogin.dart';
 // import '../api/tasks.dart';
@@ -179,65 +182,6 @@ class _TaskScreenState extends State<TaskScreen> {
             )
           ],
         ),
-      );
-    }
-}
-
-class DifficultySelect extends StatelessWidget {
-  DifficultySelect({this.onChanged, this.value}):super();
-
-  @required
-  final void Function(dynamic) onChanged;
-
-  final Difficulty value;
-
-  @override
-    Widget build(BuildContext context) {
-      // TODO: implement build
-      return new ListTile(
-        title: new DropdownButton(
-          hint: new Text("Difficulty"),
-          onChanged: onChanged,
-          value: value,
-          items:  
-            Difficulty.values.map((Difficulty diff) => 
-              new DropdownMenuItem(
-                value: diff,
-                child: new Text(diff.toString()),
-              )).toList()
-          ,
-        ),
-      );
-    }
-}
-
-
-class TagsSelect extends StatelessWidget {
-  TagsSelect({ Key key, this.task, this.onChanged }): super(key: key);
-
-  @required
-  final void Function(Tag, bool) onChanged;
-
-  @required
-  final Task task;
-
-  @override
-    Widget build(BuildContext context) {
-      // TODO: implement build
-      return new Column(
-        children: <Widget>[
-          new ListTile(
-            subtitle: new Text("Tags"),
-          ),
-          new Column(
-            children: userstore.state.user.tags.map((Tag tag) => 
-              new CheckboxListTile(
-                onChanged: (bool newValue) => onChanged(tag, newValue),
-                value: task.tags.contains(tag.id),
-                title: new Text(tag.name)
-              )).toList(),
-          )
-        ]
       );
     }
 }
