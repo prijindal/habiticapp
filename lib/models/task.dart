@@ -30,6 +30,13 @@ Map<Difficulty, double> diffToPriority = {
   Difficulty.Hard: 2.0
 };
 
+Map<Difficulty, String> diffToPrint = {
+  Difficulty.Trivial: "Trivial",
+  Difficulty.Easy: "Easy",
+  Difficulty.Medium: "Medium",
+  Difficulty.Hard: "Hard"
+};
+
 Difficulty priorityToDiff(double priority) {
   for (var key in Difficulty.values) {
     if (diffToPriority.containsKey(key)) {

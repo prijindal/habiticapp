@@ -5,7 +5,7 @@ import '../../models/task.dart';
 import '../../models/tag.dart';
 import '../../store.dart';
 
-import '../../helpers/theme.dart';
+import 'subhead.dart';
 
 class TagsSelect extends StatelessWidget {
   TagsSelect({ Key key, this.task, this.onChanged }): super(key: key);
@@ -21,14 +21,7 @@ class TagsSelect extends StatelessWidget {
       // TODO: implement build
       return new Column(
         children: <Widget>[
-          new Container(
-            margin: const EdgeInsets.only(left: 16.0, top: 16.0),
-            alignment: Alignment.bottomLeft,
-            child: new Text("Tags",
-              textAlign: TextAlign.left,
-              style: mainTheme.textTheme.caption
-            ),
-          ),
+          new SubHead("Tags"),
           new Column(
             children: userstore.state.user.tags.map((Tag tag) => 
               new CheckboxListTile(

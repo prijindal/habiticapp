@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/task.dart';
-import '../../helpers/theme.dart';
+import 'subhead.dart';
 
 class TaskScreenAdvance extends StatelessWidget {
   TaskScreenAdvance({ Key key, this.task, this.onChanged }): super(key: key);
@@ -51,14 +51,7 @@ class HabitScreenAdvance extends StatelessWidget {
       // TODO: implement build
       return new Column(
         children: <Widget>[
-          new Container(
-            margin: const EdgeInsets.only(left: 16.0, top: 16.0),
-            alignment: Alignment.bottomLeft,
-            child: new Text("Actions",
-              textAlign: TextAlign.left,
-              style: mainTheme.textTheme.caption
-            ),
-          ),
+          new SubHead("Actions"),
           new CheckboxListTile(
             onChanged: (bool newValue) {
               task.up = !task.up;
