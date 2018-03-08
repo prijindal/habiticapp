@@ -205,8 +205,12 @@ class DueDateInput extends StatelessWidget {
   String _getDate(String text) {
     const List<String> MONTHS = const ["January", "Febraury", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     if(text == null) return "No due date";
-    var date = DateTime.parse(task.date);
-    return "${MONTHS[date.month - 1]} ${date.day} ${date.year}";
+    try {
+      var date = DateTime.parse(text);
+      return "${MONTHS[date.month - 1]} ${date.day} ${date.year}";
+    } catch(e) {
+      return "No Due Date";
+    }
   }
 
   _selectDate(BuildContext context) async {

@@ -1,4 +1,4 @@
-import 'dart:async';
+// import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../helpers/theme.dart';
@@ -15,7 +15,7 @@ class SideIcon {
 
 const List<SideIcon> sideicons = const <SideIcon> [
   const SideIcon(title: "Tasks", key:"tasks", route: "/"),
-  const SideIcon(title: "Guilds", key: "guilds", route: "/guilds")
+  // const SideIcon(title: "Guilds", key: "guilds", route: "/guilds")
 ];
 
 class MainDrawer extends StatefulWidget {
@@ -52,12 +52,12 @@ class MainDrawerState extends State<MainDrawer> with RouteAware {
     Navigator.pop(context);
     // Navigator.of(context).pushReplacementNamed(name)
     // Navigator.popAndPushNamed(context, sideicon.route);
-    new Timer(const Duration(milliseconds: 100), () => _pushFromSideIcon(sideicon.route));
+    // new Timer(const Duration(milliseconds: 100), () => _pushFromSideIcon(sideicon.route));
   }
 
-  _pushFromSideIcon(String route) {
-    return Navigator.of(context).pushReplacementNamed(route); 
-  }
+  // _pushFromSideIcon(String route) {
+  //   return Navigator.of(context).pushReplacementNamed(route); 
+  // }
   
   @override
     Widget build(BuildContext context) {
