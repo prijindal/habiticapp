@@ -50,9 +50,7 @@ class _TaskContainerState extends State<TaskContainer> {
   }
 
   _updateTask(Task updatedTask) async {
-    if(widget.onChanged != null) {
-      widget.onChanged(updatedTask);
-    }
+    _callUpdateTask(updatedTask);
     await onEditTask(updatedTask);
     if(!mounted) return;
     setState(() {
@@ -64,30 +62,62 @@ class _TaskContainerState extends State<TaskContainer> {
     var index = tasksstore.state.tasks.indexWhere((task) => task.id == widget.task.id);
     return index;
   }
+  
+  _callUpdateTask(Task updatedTask) {
+    if(widget.onChanged != null) {
+      widget.onChanged(updatedTask);
+    }
+    setState(() {
+      _isLoading = true;
+    });
+  }
 
-  _plusOneTask() {
+  _plusOneTask() async {
     var index = _getIndex();
     tasksstore.state.tasks[index].counterUp = tasksstore.state.tasks[index].counterUp + 1;
-    _updateTask(tasksstore.state.tasks[index]);
+    _callUpdateTask(tasksstore.state.tasks[index]);
+    await onTaskScore(tasksstore.state.tasks[index], false);
+    if(!mounted) return;
+    setState(() {
+      _isLoading = false;
+    });
     // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
   }
 
-  _minusOneTask() {
+  _minusOneTask() async {
     var index = _getIndex();
     tasksstore.state.tasks[index].counterDown = tasksstore.state.tasks[index].counterDown + 1;
-    _updateTask(tasksstore.state.tasks[index]);
+    _callUpdateTask(tasksstore.state.tasks[index]);
+    await onTaskScore(tasksstore.state.tasks[index], false);
+    if(!mounted) return;
+    setState(() {
+      _isLoading = false;
+    });
     // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
   }
 
-  void _onTodoToggled(dynamic newValue) {
+  _onTodoToggled(dynamic newValue) async {
     var index = _getIndex();
     tasksstore.state.tasks[index].completed = newValue;
-    _updateTask(tasksstore.state.tasks[index]);
-    // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(newValue.toString())));
+    _callUpdateTask(tasksstore.state.tasks[index]);
+    await onTaskScore(tasksstore.state.tasks[index], newValue);
+    if(!mounted) return;
+    setState(() {
+      _isLoading = false;
+    });
+    // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Not yet implemented")));
   }
 
-  _onDailyDone(bool newValue) {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Not yet implemented")));
+  _onDailyDone(bool newValue) async {
+    var index = _getIndex();
+    tasksstore.state.tasks[index].completed = newValue;
+    _callUpdateTask(tasksstore.state.tasks[index]);
+    await onTaskScore(tasksstore.state.tasks[index], newValue);
+    if(!mounted) return;
+    setState(() {
+      _isLoading = false;
+    });
+    // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Not yet implemented")));
   }
 
   @override

@@ -48,3 +48,14 @@ Future<Task> editTask(Task task, LoginResponse loginInformation) async {
     throw new Exception(responseJson['error']);
   }
 }
+
+Future<bool> scoreTask(Task task, bool direction, LoginResponse loginInformation) async {
+  var url = "/tasks/${task.id}/score/${(direction ? "up":  "down")}";
+  Map<String, dynamic> responseJson = await post(url, task.toMap(), {}, loginInformation);
+  if(responseJson['success'] == true) {
+    print(responseJson["data"]);
+    return responseJson['success'];
+  } else {
+    throw new Exception(responseJson['error']);
+  }
+}
