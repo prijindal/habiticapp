@@ -19,6 +19,7 @@ class DifficultySelect extends StatelessWidget {
         children: <Widget>[
           new SubHead("Difficulty"),
           new ListTile(
+            dense: true,
             title: new DropdownButton(
               hint: new Text("Difficulty"),
               onChanged: onChanged,

@@ -25,6 +25,7 @@ class TagsSelect extends StatelessWidget {
           new Column(
             children: userstore.state.user.tags.map((Tag tag) => 
               new CheckboxListTile(
+                dense: true,
                 onChanged: (bool newValue) => onChanged(tag, newValue),
                 value: task.tags.contains(tag.id),
                 title: new Text(tag.name)

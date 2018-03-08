@@ -55,6 +55,7 @@ class HabitScreenAdvance extends StatelessWidget {
         children: <Widget>[
           new SubHead("Actions"),
           new CheckboxListTile(
+            dense: true,
             onChanged: (bool newValue) {
               task.up = !task.up;
               onChanged(task);
@@ -63,6 +64,7 @@ class HabitScreenAdvance extends StatelessWidget {
             title: new Text("Positive"),
           ),
           new CheckboxListTile(
+            dense: true,
             onChanged: (bool newValue) {
               task.down = !task.down;
               onChanged(task);
@@ -121,6 +123,10 @@ class TodoScreenAdvance extends StatelessWidget {
             task: task,
             onChanged: onChanged,
           ),
+          new DueDateInput(
+            task: task,
+            onChanged: onChanged,
+          ),
           new ReminderInput(
             task: task,
             onChanged: onChanged,
@@ -150,6 +156,7 @@ class CheckListInput extends StatelessWidget {
           new Column(
             children: task.checklist.map((item) =>
               new CheckboxListTile(
+                dense: true,
                 secondary: new IconButton(
                   onPressed: () {
                     task.checklist.remove(item);
@@ -167,9 +174,11 @@ class CheckListInput extends StatelessWidget {
             ).toList()
           ),
           new ListTile(
+            dense: true,
             title: new TextFormField(
               controller: _checkListInputController,
               decoration: new InputDecoration(
+                isDense: true,
                 hintText: "New Check List Item"
               ),
               onFieldSubmitted: (String text) {
@@ -179,6 +188,68 @@ class CheckListInput extends StatelessWidget {
               },
             )
           ),          
+        ],
+      );
+    }
+}
+
+class DueDateInput extends StatelessWidget {
+  DueDateInput({ Key key, this.task, this.onChanged }):super(key: key);
+
+  @required
+  final Task task;
+
+  @required
+  final void Function(Task task) onChanged;
+
+  String _getDate(String text) {
+    const List<String> MONTHS = const ["January", "Febraury", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    if(text == null) return "No due date";
+    var date = DateTime.parse(task.date);
+    return "${MONTHS[date.month - 1]} ${date.day} ${date.year}";
+  }
+
+  _selectDate(BuildContext context) async {
+    try {
+      var date = await showDatePicker(
+        initialDate: new DateTime.now(),
+        firstDate: new DateTime(2016),
+        context: context,
+        lastDate: new DateTime(2020)
+      );
+      if(date != null) {
+        task.date = date.toIso8601String();
+      }
+      onChanged(task);
+    } catch(e) {
+      print(e);
+    }
+  }
+
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return new Column(
+        children: <Widget>[
+          new SubHead("Due Date"),
+          new ListTile(
+            leading: new Checkbox(
+              value: task.date != null,
+              onChanged: (
+                task.date == null ?
+                (bool) {
+                  _selectDate(context);
+                } : (bool) {
+                  task.date = null;
+                  onChanged(task);
+                }
+              ),
+            ),
+            onTap: () => _selectDate(context),
+            enabled: task.date != null,
+            dense: true,
+            title: new Text(_getDate(task.date)),
+          ),
         ],
       );
     }
@@ -200,10 +271,12 @@ class ReminderInput extends StatelessWidget {
       context: context,
       lastDate: new DateTime(2020)
     );
+    if(date == null) return;
     var time = await showTimePicker(
       initialTime: new TimeOfDay.fromDateTime(date),
       context: context
     );
+    if(time == null) return;
     date = new DateTime(date.year, date.month, date.day, time.hour, time.minute);
     TaskReminder newReminder = new TaskReminder({
       "time": date.toIso8601String(),
@@ -225,6 +298,7 @@ class ReminderInput extends StatelessWidget {
           new Column(
             children: task.reminders.map((item) =>
               new ListTile(
+                dense: true,
                 leading: new IconButton(
                   onPressed: () {
                     task.reminders.remove(item);
@@ -237,6 +311,8 @@ class ReminderInput extends StatelessWidget {
             ).toList()
           ),
           new ListTile(
+            dense: true,
+            onTap: () => _addDate(context),
             leading: new IconButton(
               onPressed: () => _addDate(context),
               icon: new Icon(Icons.add),

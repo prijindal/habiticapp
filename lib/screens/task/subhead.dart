@@ -8,7 +8,7 @@ class SubHead extends StatelessWidget {
     Widget build(BuildContext context) {
       // TODO: implement build
       return new Container(
-        margin: const EdgeInsets.only(left: 16.0, top: 32.0),
+        margin: const EdgeInsets.only(left: 16.0, top: 24.0),
         alignment: Alignment.bottomLeft,
         child: new Text(text,
           textAlign: TextAlign.left,
