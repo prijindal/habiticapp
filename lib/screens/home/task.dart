@@ -28,6 +28,7 @@ class _TaskContainerState extends State<TaskContainer> {
 
   Task task;
   bool _isSelected = false;
+  bool _isLoading = false;
 
   _toggleSelected() {
     setState(() {
@@ -44,8 +45,17 @@ class _TaskContainerState extends State<TaskContainer> {
     if(updatedTask == null) return;
     setState(() {
       task = updatedTask;
+      _isLoading = true;
     });
-    onEditTask(updatedTask);
+    await onEditTask(updatedTask);
+    setState(() {
+      _isLoading = false;
+    });
+    // Scaffold.of(context).showSnackBar(
+    //   new SnackBar(
+    //     content: new Text("Task Updated")
+    //   )
+    // );
   }
 
   _plusOneTask() {
@@ -70,23 +80,35 @@ class _TaskContainerState extends State<TaskContainer> {
       return new Hero(
         tag: task.id,
         child: new Material(
+          elevation: (
+            _isLoading ?
+            8.0 :
+            0.0
+          ),
           color: (
             _isSelected ?
             Colors.black26:
             null
           ),
-          child: new InkWell(
-            child: new ListTile(
-              enabled: true,
-              onTap: (
-                _isSelected ?
-                _toggleSelected :
-                () => _openTaskPage(context)
+          child: new ListTile(
+            trailing: new AnimatedCrossFade(
+              duration: new Duration(milliseconds: 100),
+              crossFadeState: _isLoading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              alignment: Alignment.bottomRight,
+              firstChild: new CircularProgressIndicator(
+                strokeWidth: 2.0,
               ),
-              onLongPress: _toggleSelected,
-              selected: _isSelected,
-              title: _buildTaskComponent(),
+              secondChild: new Container(),
             ),
+            enabled: !_isLoading,
+            onTap: (
+              _isSelected ?
+              _toggleSelected :
+              () => _openTaskPage(context)
+            ),
+            onLongPress: _toggleSelected,
+            selected: _isSelected,
+            title: _buildTaskComponent(),
           )
         )
       );
@@ -248,10 +270,15 @@ class TaskText extends StatelessWidget {
                 textStyle: mainTheme.textTheme.body1
               ),
             ),
-            new Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              alignment: Alignment.bottomLeft,
-              child: _buildBottomWidget()
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  alignment: Alignment.bottomLeft,
+                  child: _buildBottomWidget()
+                ),
+              ],
             )
           ],
         ),
