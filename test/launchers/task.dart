@@ -18,7 +18,7 @@ void main() => runApp(
         "userId": "087ff527-8d8b-4480-8c71-8617891a0f4b",
         "text": "This a new task",
         "type": "habit",
-        "up": false,
+        "up": true,
         "down": false,
         "streak": 0 
       }),),

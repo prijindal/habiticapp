@@ -11,6 +11,8 @@ import '../../store.dart';
 import 'difficultyselect.dart';
 import 'tagselect.dart';
 
+import 'advance.dart';
+
 // import '../helpers/theme.dart';
 // import '../helpers/savedlogin.dart';
 // import '../api/tasks.dart';
@@ -175,6 +177,14 @@ class _TaskScreenState extends State<TaskScreen> {
                 });
               },
               value: task.difficulty,
+            ),
+            new TaskScreenAdvance(
+              task: task,
+              onChanged: (Task newTask) {
+                setState(() {
+                  task = newTask;
+                });
+              },
             ),
             new TagsSelect(
               task: task,
