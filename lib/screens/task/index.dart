@@ -102,7 +102,7 @@ class _TaskScreenState extends State<TaskScreen> {
   }
 
   _onSave() {
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(task);
   }
 
   _onChanged(Tag changedTag, bool newValue) {

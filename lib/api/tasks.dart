@@ -37,3 +37,14 @@ Future<Task> getTask(String id, LoginResponse loginInformation) async {
     throw new Exception(responseJson['error']);
   }
 }
+
+Future<Task> editTask(Task task, LoginResponse loginInformation) async {
+  var url = "/tasks/${task.id}";
+  Map<String, dynamic> responseJson = await put(url, task.toMap(), {}, loginInformation);
+  if(responseJson['success'] == true) {
+    Map<String, dynamic> data = responseJson['data'];    
+    return new Task(data);
+  } else {
+    throw new Exception(responseJson['error']);
+  }
+}

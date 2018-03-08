@@ -42,17 +42,26 @@ Future<Map<String, dynamic>> get(String url, [Map<String,String> query, LoginRes
   return await postProcess(responseStream);
 }
 
-Future<Map<String, dynamic>> post(String url, Map<String, dynamic> body, [Map<String,String> query, LoginResponse loginInformation]) async {
+Future<Map<String, dynamic>> dataRequest(String url, String method, Map<String, dynamic> body, [Map<String,String> query, LoginResponse loginInformation]) async {
   var httpClient = new http.Client();
   var headers = getHeaders(loginInformation);
   headers['content-type'] = "application/json";  
   Uri uri = uriBuilder(url, query);
-  http.Request request = new http.Request("POST", uri);
+  http.Request request = new http.Request(method, uri);
   request.body = JSON.encode(body);
   request.headers.addAll(headers);
   var responseStream = await httpClient.send(request);
   return await postProcess(responseStream);
 }
+
+Future<Map<String, dynamic>> post(String url, Map<String, dynamic> body, [Map<String,String> query, LoginResponse loginInformation]) async {
+  return await dataRequest(url, "POST", body, query, loginInformation);
+}
+
+Future<Map<String, dynamic>> put(String url, Map<String, dynamic> body, [Map<String,String> query, LoginResponse loginInformation]) async {
+  return await dataRequest(url, "PUT", body, query, loginInformation);
+}
+
 
 postProcess(http.StreamedResponse responseStream) async {
   String response = await responseStream.stream.bytesToString();

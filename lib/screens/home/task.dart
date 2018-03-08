@@ -7,6 +7,11 @@ import '../../helpers/markdown.dart';
 
 import '../../helpers/theme.dart';
 
+// import '../../api/tasks.dart';
+// import '../../helpers/savedlogin.dart';
+
+import '../../sagas/tasks.dart';
+
 import '../task/index.dart';
 import '../../libraries/markdown/flutter_markdown.dart';
 
@@ -30,13 +35,16 @@ class _TaskContainerState extends State<TaskContainer> {
     });
   }
 
-  _openTaskPage(BuildContext context) {
-    Navigator.of(context).push(
-      new TaskPageRoute<Null>(
+  _openTaskPage(BuildContext context) async {
+    Task updatedTask = await Navigator.of(context).push(
+      new TaskPageRoute<Task>(
         builder: (BuildContext context) => new TaskScreen(task: task),
       )
     );
-    // Navigator.of(context).pushNamed('/tasks/${task.id}');
+    setState(() {
+      task = updatedTask;
+    });
+    onEditTask(updatedTask);
   }
 
   _plusOneTask() {

@@ -56,6 +56,22 @@ onNewTask(String text, String type) async {
   }
 }
 
+onEditTask(Task task) async{
+  var loginInformation = await getLoginInformation();
+  tasksstore.dispatch(TaskAction.startLoading());
+  try {
+    Task editedTask = await editTask(task, loginInformation);
+    int foundTaskIndex = tasksstore.state.tasks.lastIndexWhere((Task checkingTask) {
+      return checkingTask.id == task.id;
+    });
+    tasksstore.dispatch(TaskAction.replaceTask(foundTaskIndex, editedTask));
+    tasksstore.dispatch(TaskAction.stopLoading());
+    syncTasks(tasksstore.state.tasks);
+  } catch(e) {
+    print(e);
+  }
+}
+
 syncTasks(tasks) async {
   syncObject(_taskProvider, tasks);
 }
