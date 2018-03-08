@@ -137,6 +137,9 @@ class Task extends BaseObject {
     map = checkNullAndAdd(map, columnDate, date);
     map = checkNullAndAdd(map, columnUp, up);
     map = checkNullAndAdd(map, columnDown, down);
+    map = checkNullAndAdd(map, columnCompleted, completed);
+    map = checkNullAndAdd(map, columnCounterUp, counterUp);
+    map = checkNullAndAdd(map, columnCounterDown, counterDown);
     map = checkNullAndAdd(map, columnStreak, streak);
     return map;
   }

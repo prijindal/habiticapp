@@ -47,31 +47,49 @@ class _TaskContainerState extends State<TaskContainer> {
       task = updatedTask;
       _isLoading = true;
     });
+    await _updateTask(updatedTask);
+  }
+
+  _updateTask(Task updatedTask) async {
     await onEditTask(updatedTask);
+    if(!mounted) return;
     setState(() {
       _isLoading = false;
     });
-    // Scaffold.of(context).showSnackBar(
-    //   new SnackBar(
-    //     content: new Text("Task Updated")
-    //   )
-    // );
   }
 
   _plusOneTask() {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
+    var counterUp = task.counterUp + 1;
+    setState(() {
+      task.counterUp = counterUp;
+    });
+    task.counterUp = counterUp;
+    _updateTask(task);
+    // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
   }
 
   _minusOneTask() {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
+    var counterDown = task.counterDown + 1;
+    setState(() {
+      task.counterDown = counterDown;
+    });
+    task.counterDown = counterDown;
+    _updateTask(task);
+    // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
   }
 
   void _onTodoToggled(dynamic newValue) {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(newValue.toString())));    
+    setState(() {
+      task.completed = newValue;
+      _isLoading = true;
+    });
+    task.completed = newValue;
+    _updateTask(task);
+    // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(newValue.toString())));
   }
 
   _onDailyDone(bool newValue) {
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Done")));        
+    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Not yet implemented")));
   }
 
   @override
@@ -95,8 +113,17 @@ class _TaskContainerState extends State<TaskContainer> {
               duration: new Duration(milliseconds: 100),
               crossFadeState: _isLoading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
               alignment: Alignment.bottomRight,
-              firstChild: new CircularProgressIndicator(
-                strokeWidth: 2.0,
+              firstChild: new Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 16.0,
+                  maxHeight: 16.0,
+                ),
+                child: new Container(
+                  margin: const EdgeInsets.all(2.0),
+                  child: new CircularProgressIndicator(
+                    strokeWidth: 2.0,
+                  ),
+                )
               ),
               secondChild: new Container(),
             ),
