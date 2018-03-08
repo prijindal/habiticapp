@@ -85,7 +85,14 @@ class DailyScreenAdvance extends StatelessWidget {
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
-      return new Text(task.type);
+      return new Column(
+        children: <Widget>[
+          new CheckListInput(
+            task: task,
+            onChanged: onChanged,
+          ),
+        ],
+      );
     }
 }
 
@@ -98,9 +105,64 @@ class TodoScreenAdvance extends StatelessWidget {
   @required
   final void Function(Task task) onChanged;
 
+
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
-      return new Text(task.type);
+      return new Column(
+        children: <Widget>[
+          new CheckListInput(
+            task: task,
+            onChanged: onChanged,
+          ),
+        ],
+      );
+    }
+}
+
+class CheckListInput extends StatelessWidget {
+  CheckListInput({ Key key, this.task,this.onChanged }): super(key: key);
+
+  @required
+  final Task task;
+
+  @required
+  final void Function(Task task) onChanged;
+
+  final TextEditingController _checkListInputController = new TextEditingController();
+
+  @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return new Column(
+        children: <Widget>[
+          new SubHead('CheckList'),
+          new Column(
+            children: task.checklist.map((item) =>
+              new CheckboxListTile(
+                onChanged: (bool newValue) {
+                  task.checklist[task.checklist.indexOf(item)].completed = newValue;
+                  onChanged(task);
+                },
+                value: item.completed,
+                title: new Text(item.text)
+              )
+            ).toList()
+          ),
+          new ListTile(
+            title: new TextFormField(
+              controller: _checkListInputController,
+              decoration: new InputDecoration(
+                hintText: "New Check List Item"
+              ),
+              onFieldSubmitted: (String text) {
+                task.checklist.add(new TaskCheckListItem({"text": text, "id": text}));
+                onChanged(task);
+                _checkListInputController.clear();
+              },
+            )
+          ),          
+        ],
+      );
     }
 }

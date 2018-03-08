@@ -15,6 +15,7 @@ final String columnCounterDown = "counterDown";
 final String columnStreak = "streak";
 final String columnPriority = "priority";
 final String columnTags = "tags";
+final String columnCheckList = "checklist";
 
 enum Difficulty {
   Trivial,
@@ -37,7 +38,7 @@ Map<Difficulty, String> diffToPrint = {
   Difficulty.Hard: "Hard"
 };
 
-Difficulty priorityToDiff(double priority) {
+Difficulty priorityToDiff(dynamic priority) {
   for (var key in Difficulty.values) {
     if (diffToPriority.containsKey(key)) {
       if(diffToPriority[key] == priority) {
@@ -46,6 +47,30 @@ Difficulty priorityToDiff(double priority) {
     }
   }
   return Difficulty.Trivial;
+}
+
+class TaskCheckListItem extends BaseObject {
+  String id;
+  String text;
+  bool completed;
+
+  @override
+  TaskCheckListItem(Map<String, dynamic> map):super(map) {
+    id = getDefaultMap(map, "id");
+    text = getDefaultMap(map, "text");
+    completed = getDefaultMap(map, "completed", false);
+  }
+
+  @override
+    Map<String, dynamic> toMap() {
+      // TODO: implement toMap
+      Map map = {
+        "id": id,
+        "text": text,
+        "completed": completed
+      };
+      return map;
+    }
 }
 
 class Task extends BaseObject {
@@ -60,6 +85,7 @@ class Task extends BaseObject {
     notes = getDefaultMap(map, columnnotes);
     difficulty = priorityToDiff(getDefaultMap(map, columnPriority));
     tags = getDefaultMap(map, columnTags);
+    checklist = getDefaultMap(map, columnCheckList, []).map((checkListItem) => new TaskCheckListItem(checkListItem)).toList();
 
     up = getDefaultMap(map, columnUp, false);
     down = getDefaultMap(map, columnDown, false);
@@ -77,6 +103,7 @@ class Task extends BaseObject {
       columnText: text,
       columnType: type,
     };
+    map = checkNullAndAdd(map, columnCheckList, checklist.map((f) => f.toMap()).toList());
     map = checkNullAndAdd(map, columnTags, tags);
     map = checkNullAndAdd(map, columnPriority, diffToPriority[difficulty]);
     map = checkNullAndAdd(map, columnnotes, notes);
@@ -101,6 +128,7 @@ class Task extends BaseObject {
   int streak;
   Difficulty difficulty;
   List<String> tags;
+  List<TaskCheckListItem> checklist;
 }
 
 class TaskProvider extends ListProvider<Task> {
