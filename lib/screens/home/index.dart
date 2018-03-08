@@ -74,6 +74,13 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     }
   }
 
+  List<Task> getTasks() {
+    if(tasks == null) {
+      return [];
+    }
+    return tasks;
+  }
+
   @override
     Widget build(BuildContext context) {
       return new Scaffold(
@@ -140,7 +147,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                 controller: _tabController,
                 children:choices.map((Choice choice) =>
                   new HomePageBody(
-                    tasks: tasks.where((task) => task.type == choice.type).toList(),
+                    tasks: getTasks().where((task) => task.type == choice.type).toList(),
                     key: new Key(choice.type)
                   ),
                 ).toList(),
