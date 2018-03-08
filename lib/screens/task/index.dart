@@ -144,6 +144,11 @@ class _TaskScreenState extends State<TaskScreen> {
               margin: const EdgeInsets.only(top: 5.0),
               child: new TaskContainer(
                 task: task,
+                onChanged: (Task newTask) {
+                  setState(() {
+                    task = newTask;
+                  });
+                }
                 // text: (task.text != null ? task.text: ""),
                 // textStyle: mainTheme.textTheme.body1
               ),

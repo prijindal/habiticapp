@@ -12,21 +12,21 @@ import '../../helpers/theme.dart';
 
 import '../../sagas/tasks.dart';
 
+import '../../store.dart';
+
 import '../task/index.dart';
 import '../../libraries/markdown/flutter_markdown.dart';
 
 class TaskContainer extends StatefulWidget{
-  TaskContainer({Key key, this.task}):super(key: key);
+  TaskContainer({Key key, this.task, this.onChanged}):super(key: key);
   final Task task;
+  final void Function(Task task) onChanged;
 
   @override
-  _TaskContainerState createState() => new _TaskContainerState(task: task);
+  _TaskContainerState createState() => new _TaskContainerState();
 }
 
 class _TaskContainerState extends State<TaskContainer> {
-  _TaskContainerState({this.task}):super();
-
-  Task task;
   bool _isSelected = false;
   bool _isLoading = false;
 
@@ -39,18 +39,20 @@ class _TaskContainerState extends State<TaskContainer> {
   _openTaskPage(BuildContext context) async {
     Task updatedTask = await Navigator.of(context).push(
       new TaskPageRoute<Task>(
-        builder: (BuildContext context) => new TaskScreen(task: task),
+        builder: (BuildContext context) => new TaskScreen(task: widget.task),
       )
     );
     if(updatedTask == null) return;
     setState(() {
-      task = updatedTask;
       _isLoading = true;
     });
     await _updateTask(updatedTask);
   }
 
   _updateTask(Task updatedTask) async {
+    if(widget.onChanged != null) {
+      widget.onChanged(updatedTask);
+    }
     await onEditTask(updatedTask);
     if(!mounted) return;
     setState(() {
@@ -58,33 +60,29 @@ class _TaskContainerState extends State<TaskContainer> {
     });
   }
 
+  int _getIndex() {
+    var index = tasksstore.state.tasks.indexWhere((task) => task.id == widget.task.id);
+    return index;
+  }
+
   _plusOneTask() {
-    var counterUp = task.counterUp + 1;
-    setState(() {
-      task.counterUp = counterUp;
-    });
-    task.counterUp = counterUp;
-    _updateTask(task);
+    var index = _getIndex();
+    tasksstore.state.tasks[index].counterUp = tasksstore.state.tasks[index].counterUp + 1;
+    _updateTask(tasksstore.state.tasks[index]);
     // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
   }
 
   _minusOneTask() {
-    var counterDown = task.counterDown + 1;
-    setState(() {
-      task.counterDown = counterDown;
-    });
-    task.counterDown = counterDown;
-    _updateTask(task);
+    var index = _getIndex();
+    tasksstore.state.tasks[index].counterDown = tasksstore.state.tasks[index].counterDown + 1;
+    _updateTask(tasksstore.state.tasks[index]);
     // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Hello")));
   }
 
   void _onTodoToggled(dynamic newValue) {
-    setState(() {
-      task.completed = newValue;
-      _isLoading = true;
-    });
-    task.completed = newValue;
-    _updateTask(task);
+    var index = _getIndex();
+    tasksstore.state.tasks[index].completed = newValue;
+    _updateTask(tasksstore.state.tasks[index]);
     // Scaffold.of(context).showSnackBar(new SnackBar(content: new Text(newValue.toString())));
   }
 
@@ -96,7 +94,7 @@ class _TaskContainerState extends State<TaskContainer> {
     Widget build(BuildContext context) {
       // TODO: implement build
       return new Hero(
-        tag: task.id,
+        tag: widget.task.id,
         child: new Material(
           elevation: (
             _isLoading ?
@@ -142,27 +140,27 @@ class _TaskContainerState extends State<TaskContainer> {
     }
 
   _buildTaskComponent() {
-    switch (task.type) {
+    switch (widget.task.type) {
       case "todo":
         return new TodoTask(
-          task: task,
+          task: widget.task,
           onTodoToggled: _onTodoToggled,
         );
         break;
       case "habit":
         return new HabitTask(
-          task: task,
+          task: widget.task,
           plusOneTask: _plusOneTask,
           minusOneTask: _minusOneTask,
         );
         break;
       case "daily":
         return new DailyTask(
-          task: task,
+          task: widget.task,
           onDailyDone: _onDailyDone
         );
       default:
-        return new Text(task.text);
+        return new Text(widget.task.text);
     }
   }
 }

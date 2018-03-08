@@ -58,12 +58,13 @@ onNewTask(String text, String type) async {
 
 onEditTask(Task task) async{
   var loginInformation = await getLoginInformation();
+  int foundTaskIndex = tasksstore.state.tasks.lastIndexWhere((Task checkingTask) {
+    return checkingTask.id == task.id;
+  });
+  tasksstore.dispatch(TaskAction.replaceTask(foundTaskIndex, task));
   tasksstore.dispatch(TaskAction.startLoading());
   try {
     Task editedTask = await editTask(task, loginInformation);
-    int foundTaskIndex = tasksstore.state.tasks.lastIndexWhere((Task checkingTask) {
-      return checkingTask.id == task.id;
-    });
     tasksstore.dispatch(TaskAction.replaceTask(foundTaskIndex, editedTask));
     tasksstore.dispatch(TaskAction.stopLoading());
     syncTasks(tasksstore.state.tasks);
