@@ -76,7 +76,7 @@ class _TaskContainerState extends State<TaskContainer> {
     var index = _getIndex();
     tasksstore.state.tasks[index].counterUp = tasksstore.state.tasks[index].counterUp + 1;
     _callUpdateTask(tasksstore.state.tasks[index]);
-    await onTaskScore(tasksstore.state.tasks[index], false);
+    await onTaskScore(tasksstore.state.tasks[index], true);
     if(!mounted) return;
     setState(() {
       _isLoading = false;
