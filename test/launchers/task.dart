@@ -26,6 +26,11 @@ Task todo = new Task({
   "type": "todo",
   "tags": [],
   "checklist": [],
+  "reminders": [{
+    "startDate": "2018-03-10T01:00:00.000Z",
+    "time": "2018-03-10T01:00:00.000Z",
+    "id": "e62dc70d-af28-41b7-a8c4-b16e41c34c5a"
+  }],
   "priority": 0.1,
   "notes": "", 
   "up": false,
@@ -51,7 +56,7 @@ void main() => runApp(
   new RootApplication(
     initialScreen: new MaterialApp(
       theme: mainTheme,
-      home: new TaskScreen(task: daily),
+      home: new TaskScreen(task: todo),
     )
   )
 );

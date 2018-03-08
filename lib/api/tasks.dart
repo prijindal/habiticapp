@@ -12,6 +12,7 @@ Future<List<Task>> getTasks({String type, LoginResponse loginInformation}) async
   }
   Map<String, dynamic> responseJson = await get(url, query, loginInformation);
   List<Map<String, dynamic>> data = responseJson['data'];
+  print(data.map((f) => f["reminders"]).toList());
   List<Task> tasks = data.map((task) => new Task(task)).toList();
   return tasks;
 }

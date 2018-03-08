@@ -16,6 +16,7 @@ final String columnStreak = "streak";
 final String columnPriority = "priority";
 final String columnTags = "tags";
 final String columnCheckList = "checklist";
+final String columnReminders = "reminders";
 
 enum Difficulty {
   Trivial,
@@ -73,6 +74,30 @@ class TaskCheckListItem extends BaseObject {
     }
 }
 
+class TaskReminder extends BaseObject {
+  String id;
+  String startDate;
+  String time;
+
+  @override
+  TaskReminder(Map<String, dynamic> map):super(map) {
+    id = getDefaultMap(map, "id");
+    startDate = getDefaultMap(map, "startDate");
+    time = getDefaultMap(map, "time");
+  }
+
+  @override
+    Map<String, dynamic> toMap() {
+      // TODO: implement toMap
+      Map map = {
+        "id": id,
+        "startDate": startDate,
+        "time": time
+      };
+      return map;
+    }
+}
+
 class Task extends BaseObject {
   @override
   Task(Map<String, dynamic> map):super(map) {
@@ -86,6 +111,7 @@ class Task extends BaseObject {
     difficulty = priorityToDiff(getDefaultMap(map, columnPriority));
     tags = getDefaultMap(map, columnTags);
     checklist = getDefaultMap(map, columnCheckList, []).map((checkListItem) => new TaskCheckListItem(checkListItem)).toList();
+    reminders = getDefaultMap(map, columnReminders, []).map((reminder) => new TaskReminder(reminder)).toList();
 
     up = getDefaultMap(map, columnUp, false);
     down = getDefaultMap(map, columnDown, false);
@@ -103,6 +129,7 @@ class Task extends BaseObject {
       columnText: text,
       columnType: type,
     };
+    map = checkNullAndAdd(map, columnReminders, reminders.map((f) => f.toMap()).toList());
     map = checkNullAndAdd(map, columnCheckList, checklist.map((f) => f.toMap()).toList());
     map = checkNullAndAdd(map, columnTags, tags);
     map = checkNullAndAdd(map, columnPriority, diffToPriority[difficulty]);
@@ -129,6 +156,7 @@ class Task extends BaseObject {
   Difficulty difficulty;
   List<String> tags;
   List<TaskCheckListItem> checklist;
+  List<TaskReminder> reminders;
 }
 
 class TaskProvider extends ListProvider<Task> {
