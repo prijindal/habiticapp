@@ -43,13 +43,9 @@ class MainDrawerState extends State<MainDrawer> with RouteAware {
     }
 
   ImageProvider _getProfilePicture() {
-    // try {
-    //   return new NetworkImage(
-    //     user.profile.imageUrl,
-    //   );
-    // } catch(e) {
-      return new NetworkImage("https://randomuser.me/api/portraits/med/men/10.jpg");
-    // }
+    return new NetworkImage(
+      user.profile.imageUrl
+    );
   }
 
   _onMenuButtonPressed(SideIcon sideicon) {
