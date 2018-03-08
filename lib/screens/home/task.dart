@@ -125,46 +125,49 @@ class _TaskContainerState extends State<TaskContainer> {
       // TODO: implement build
       return new Hero(
         tag: widget.task.id,
-        child: new Material(
-          elevation: (
-            (_isLoading || widget.task.notes == null) ?
-            8.0 :
-            0.0
-          ),
-          color: (
-            _isSelected ?
-            Colors.black26:
-            null
-          ),
-          child: new ListTile(
-            trailing: new AnimatedCrossFade(
-              duration: new Duration(milliseconds: 100),
-              crossFadeState: (_isLoading || widget.task.notes == null) ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-              alignment: Alignment.bottomRight,
-              firstChild: new Container(
-                constraints: const BoxConstraints(
-                  maxWidth: 16.0,
-                  maxHeight: 16.0,
-                ),
-                child: new Container(
-                  margin: const EdgeInsets.all(2.0),
-                  child: new CircularProgressIndicator(
-                    strokeWidth: 2.0,
-                  ),
-                )
-              ),
-              secondChild: new Container(),
+        child: new Container(
+          margin: const EdgeInsets.symmetric(vertical: 4.0),
+          child: new Material(
+            elevation: (
+              (_isLoading || widget.task.notes == null) ?
+              8.0 :
+              0.0
             ),
-            enabled: !(_isLoading || widget.task.notes == null),
-            onTap: (
+            color: (
               _isSelected ?
-              _toggleSelected :
-              () => _openTaskPage(context)
+              Colors.black26:
+              null
             ),
-            onLongPress: _toggleSelected,
-            selected: _isSelected,
-            title: _buildTaskComponent(),
-          )
+            child: new ListTile(
+              trailing: new AnimatedCrossFade(
+                duration: new Duration(milliseconds: 100),
+                crossFadeState: (_isLoading || widget.task.notes == null) ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                alignment: Alignment.bottomRight,
+                firstChild: new Container(
+                  constraints: const BoxConstraints(
+                    maxWidth: 16.0,
+                    maxHeight: 16.0,
+                  ),
+                  child: new Container(
+                    margin: const EdgeInsets.all(2.0),
+                    child: new CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                    ),
+                  )
+                ),
+                secondChild: new Container(),
+              ),
+              enabled: !(_isLoading || widget.task.notes == null),
+              onTap: (
+                _isSelected ?
+                _toggleSelected :
+                () => _openTaskPage(context)
+              ),
+              onLongPress: _toggleSelected,
+              selected: _isSelected,
+              title: _buildTaskComponent(),
+            )
+          ),
         )
       );
     }
