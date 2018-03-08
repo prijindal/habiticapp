@@ -59,7 +59,7 @@ class _TaskContainerState extends State<TaskContainer> {
     Widget build(BuildContext context) {
       // TODO: implement build
       return new Hero(
-        tag: task,
+        tag: task.id,
         child: new Material(
           color: (
             _isSelected ?

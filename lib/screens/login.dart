@@ -20,6 +20,10 @@ class LoginScreen extends StatelessWidget {
       return new MaterialPageRoute(
         builder: (context) => new LoginPage(onLoggedIn: onLoggedIn)
       );
+    } else if(route.name == "/signup") {
+      return new MaterialPageRoute(
+        builder: (context) => new LoginPage(onLoggedIn: onLoggedIn)
+      );
     } else {
       return null;
     }
@@ -124,6 +128,15 @@ class _LoginPageState extends State<LoginPage> {
                     title: new RaisedButton(
                       onPressed: isLoggingLoading ? null : _loginHabitica,
                       child: new Text("Login"),
+                    ),
+                  ),
+                  new ListTile(
+                    // padding: new EdgeInsets.only(left: 24.0, top: 24.0),
+                    title: new RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/signup');
+                      },
+                      child: new Text("Signup"),
                     ),
                   ),
                 ],
