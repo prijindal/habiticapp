@@ -155,7 +155,7 @@ class _TaskContainerState extends State<TaskContainer> {
               ),
               secondChild: new Container(),
             ),
-            enabled: !_isLoading,
+            enabled: !(_isLoading || tasksstore.state.isLoading || userstore.state.isLoading),
             onTap: (
               _isSelected ?
               _toggleSelected :
