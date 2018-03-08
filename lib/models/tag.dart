@@ -1,5 +1,4 @@
 import 'base.dart';
-import 'provider.dart';
 
 class Tag extends BaseObject {
   String id;  
