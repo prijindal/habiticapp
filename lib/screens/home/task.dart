@@ -127,7 +127,7 @@ class _TaskContainerState extends State<TaskContainer> {
         tag: widget.task.id,
         child: new Material(
           elevation: (
-            _isLoading ?
+            (_isLoading || widget.task.notes == null) ?
             8.0 :
             0.0
           ),
@@ -139,7 +139,7 @@ class _TaskContainerState extends State<TaskContainer> {
           child: new ListTile(
             trailing: new AnimatedCrossFade(
               duration: new Duration(milliseconds: 100),
-              crossFadeState: _isLoading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              crossFadeState: (_isLoading || widget.task.notes == null) ? CrossFadeState.showFirst : CrossFadeState.showSecond,
               alignment: Alignment.bottomRight,
               firstChild: new Container(
                 constraints: const BoxConstraints(
@@ -155,7 +155,7 @@ class _TaskContainerState extends State<TaskContainer> {
               ),
               secondChild: new Container(),
             ),
-            enabled: !(_isLoading || tasksstore.state.isLoading || userstore.state.isLoading),
+            enabled: !(_isLoading || widget.task.notes == null),
             onTap: (
               _isSelected ?
               _toggleSelected :
