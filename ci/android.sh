@@ -16,6 +16,11 @@ cd android &&
 
 cd ../
 
+rm build/app/outputs/apk/release/app-release.apk
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 build/app/outputs/apk/release/app-release-unsigned.apk prijindal -keystore .keystore -storepass $storepass -keypass $keypass
+jarsigner -verify -verbose build/app/outputs/apk/release/app-release-unsigned.apk
+$ANDROID_HOME/build-tools/26.0.3/zipalign -v 4 build/app/outputs/apk/release/app-release-unsigned.apk build/app/outputs/apk/release/app-release.apk
+
 adb install -r build/app/outputs/apk/release/app-release.apk &&
 # adb install -r build/app/outputs/apk/debug/app-debug.apk
 

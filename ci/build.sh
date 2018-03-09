@@ -14,7 +14,7 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]; then
   export ANDROID_HOME=`pwd`/android-sdk
   export PATH=`pwd`/android-sdk/tools/bin:$PATH
   flutter build apk --release
-  jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 build/app/outputs/apk/release/app-release-unsigned.apk prijindal -keystore $HOME/.keystore -storepass $storepass -keypass $keypass
+  jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 build/app/outputs/apk/release/app-release-unsigned.apk prijindal -keystore .keystore -storepass $storepass -keypass $keypass
   jarsigner -verify -verbose build/app/outputs/apk/release/app-release-unsigned.apk
   $ANDROID_HOME/build-tools/26.0.3/zipalign -v 4 build/app/outputs/apk/release/app-release-unsigned.apk build/app/outputs/apk/release/app-release.apk
   echo "Android Application built"
