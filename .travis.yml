@@ -1,47 +1,41 @@
 os:
-  - linux
-
+- linux
 sudo: false
-
 addons:
   apt:
-    # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
     sources:
-      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
+    - ubuntu-toolchain-r-test
     packages:
-      - libstdc++6
-      - fonts-droid
-
-# safelist
+    - libstdc++6
+    - fonts-droid
 branches:
   only:
   - master
-
 git:
-  # We rely on git tags for determining the version.
   depth: false
-
 cache:
   bundler: true
   directories:
-    - $HOME/.pub-cache
-
-# Testing
+  - "$HOME/.pub-cache"
+env:
+  global:
+  - secure: dDEQsmo4lchWlmI1HGITwemkgkLKKrJUOnMgi9X8O2xkAtEpauN/h2o5oJZ+7aAGdyZyi0KpbBqVhckYoT7Qu/aMdswdqw6nw0xqOj5KyXUP2o86+FR55giFcWNQ52WJPb/823nF7yA0tYiSsuux6pQ82Jhj6QoWgmVYtrojf9iqsYBXPn2t95N5vTi3pxJ7BrVg8mV/EYzBBpW7Fj/wsR8tfKqlPT5FKeA0mJ3+rgk+HRJJLxOmiR3caSNarFADDDMfpFFaucIqGsY7ZiArfPex7bwTX2QhOrccav20h4Ugp1UjxTVU2hOtiDISTBaKXpofL0KWVoQr7boeABDqVSxVGnun/Hz+l1aYD5Q6JbZev34pDsfw0LF7n4DYk15+Go4jNPbSWGutCp1X+4+0Kl/5uQLwDxrefq/KS+SKeVJLiELnC1CL7mFHCVgUO2OJm5uRM3Nvyb7dUt1ZIPuufh8sxPhHSp2kgJlRRMSbI2d7BArnOiXWtNERnpVgsjZ2z1mqSdGPQR5tGTLTRuXSni4oCVzOlUY8huz8w1qmAiF73IEQCILyhShCagAcF6EjB33vkGO6jlUo9rmOELFcsdi4IIsVXPbVWibJ3C3dOU59fDdEy+x2JqbKGfCD9BWF28ksUN7ZsxD8gy271qW76AeyQELLMAFvZleOPJq7tcA=
+  - secure: 0L7Yg6kH29EMPJfVGgeYbFAyXJW9ZoBHpDxq0bUTl+TJ13DQ9JbtEmrwhtgtVatsgM+NeTod4lnIiTllYRDjRaHgArME8aZe+vfjDEhSrXl7D5vaeasblY3aoLcW8CVDFG3A9zLP/tPa20KIEcTmXgSo6qksfbRmksMwSDmcaES8P1cDgfuO/tCAAbR8ustCuVX5Y/rGK4vmEAH1p7efqnmgNUmLN0kZoBQxPHSAVuKLqqhcvFBVA8CcRAxt1nrRPDbdVynZc+FHidDNZWlLoesIvRVy+3Wj6EdvNkAUrnsdZXMLaY1PFT4Ph8qfzt6Z3mA2Aoqm86lfDLyK4BT4mSKxj7S0QHPq/dYX+adArxFdG6JLpxGPMTQRkeY9x3tK/4U3WHj7zXt3na5a1rzlen0SiXyhKgfASvc+SGeVp0ntwFZg83Nz9Hkb2AjEfGaepKwBQvPs38ZlDQOvErtrB0/Iubui8ns+HJu3xtkr+aZmD+smASHiUsr2bDW5X0U9UR8dJCUEseHauokwqHDGxf7yXeyar1bCochDjPpXGBOdmv2IjtoFB8AbUhtawe5fzWbNOaNlPhX/WhqWsOz4FCZ9iYRE2jVMYKP/+4cdBrFLOz63/DgaFIKpqgMipbrasWWc+C4lkbI+GglWgU98A6FkGCNg5bro6/eLxDqf2Ag=
+before_install:
+- openssl aes-256-cbc -K $encrypted_15f5c7efb239_key -iv $encrypted_15f5c7efb239_iv
+  -in .keystore.enc -out .keystore -d
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b master --depth 1
-  - ./flutter/bin/flutter doctor -v
-  - ./flutter/bin/flutter packages get
-  - gem install coveralls-lcov
-
+- git clone https://github.com/flutter/flutter.git -b master --depth 1
+- "./flutter/bin/flutter doctor -v"
+- "./flutter/bin/flutter packages get"
+- gem install coveralls-lcov
 script:
-  - ulimit -S -n 2048
-  - ./flutter/bin/flutter analyze lib/ test/
-  - ./flutter/bin/flutter test --coverage
-
+- ulimit -S -n 2048
+- "./flutter/bin/flutter analyze lib/ test/"
+- "./flutter/bin/flutter test --coverage"
 after_success:
-  - coveralls-lcov coverage/lcov.info  
-  - ./ci/setup.sh 
-  - ./ci/build.sh
-
+- coveralls-lcov coverage/lcov.info
+- "./ci/setup.sh"
+- "./ci/build.sh"
 after_failure:
-  - coveralls-lcov coverage/lcov.info    
+- coveralls-lcov coverage/lcov.info
