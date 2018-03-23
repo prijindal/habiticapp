@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import '../screens/home/index.dart';
 import '../screens/task/index.dart';
@@ -22,9 +23,9 @@ class App extends StatelessWidget {
         return new MaterialPageRoute<Null>(
           builder: (BuildContext context) => 
             new TaskScreen(
-              task: new Task({
+              task: new Task(LinkedHashMap.from({
                 "id": routeSplitted[2]
-              })
+              }))
             ),
           fullscreenDialog: true
         );

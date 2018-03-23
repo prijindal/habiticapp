@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 
@@ -182,7 +183,7 @@ class CheckListInput extends StatelessWidget {
                 hintText: "New Check List Item"
               ),
               onFieldSubmitted: (String text) {
-                task.checklist.add(new TaskCheckListItem({"text": text, "id": text}));
+                task.checklist.add(new TaskCheckListItem(LinkedHashMap.from({"text": text, "id": text})));
                 onChanged(task);
                 _checkListInputController.clear();
               },
@@ -282,9 +283,9 @@ class ReminderInput extends StatelessWidget {
     );
     if(time == null) return;
     date = new DateTime(date.year, date.month, date.day, time.hour, time.minute);
-    TaskReminder newReminder = new TaskReminder({
+    TaskReminder newReminder = new TaskReminder(LinkedHashMap.from({
       "time": date.toIso8601String(),
-    });
+    }));
     task.reminders.add(newReminder);
     onChanged(task);
   }

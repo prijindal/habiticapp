@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'base.dart';
 
 class Tag extends BaseObject {
@@ -5,13 +6,13 @@ class Tag extends BaseObject {
   String name;
   @override
 
-  Tag(Map<String, dynamic> map):super(map) {
+  Tag(LinkedHashMap map):super(map) {
     id = getDefaultMap(map, "id");
     name = getDefaultMap(map, "name");
   }
 
   @override
-    Map<String, dynamic> toMap() {
+    LinkedHashMap toMap() {
       // TODO: implement toMap
       Map map = {
         "name": name,

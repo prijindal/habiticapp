@@ -1,5 +1,6 @@
 import 'base.dart';
 import 'provider.dart';
+import 'dart:collection';
 
 final String columnId = "id";
 final String columnUserId = "userId";
@@ -56,14 +57,14 @@ class TaskCheckListItem extends BaseObject {
   bool completed;
 
   @override
-  TaskCheckListItem(Map<String, dynamic> map):super(map) {
+  TaskCheckListItem(LinkedHashMap map):super(map) {
     id = getDefaultMap(map, "id");
     text = getDefaultMap(map, "text");
     completed = getDefaultMap(map, "completed", false);
   }
 
   @override
-    Map<String, dynamic> toMap() {
+    LinkedHashMap toMap() {
       // TODO: implement toMap
       Map map = {
         "id": id,
@@ -80,14 +81,14 @@ class TaskReminder extends BaseObject {
   String time;
 
   @override
-  TaskReminder(Map<String, dynamic> map):super(map) {
+  TaskReminder(LinkedHashMap map):super(map) {
     id = getDefaultMap(map, "id");
     startDate = getDefaultMap(map, "startDate");
     time = getDefaultMap(map, "time");
   }
 
   @override
-    Map<String, dynamic> toMap() {
+    LinkedHashMap toMap() {
       // TODO: implement toMap
       Map map = {
         "id": id,
@@ -100,7 +101,7 @@ class TaskReminder extends BaseObject {
 
 class Task extends BaseObject {
   @override
-  Task(Map<String, dynamic> map):super(map) {
+  Task(LinkedHashMap map):super(map) {
     id = getDefaultMap(map, columnId);
     userId = getDefaultMap(map, columnUserId);
     text = getDefaultMap(map, columnText);
@@ -109,9 +110,9 @@ class Task extends BaseObject {
 
     notes = getDefaultMap(map, columnnotes);
     difficulty = priorityToDiff(getDefaultMap(map, columnPriority));
-    tags = getDefaultMap(map, columnTags);
-    checklist = getDefaultMap(map, columnCheckList, []).map((checkListItem) => new TaskCheckListItem(checkListItem)).toList();
-    reminders = getDefaultMap(map, columnReminders, []).map((reminder) => new TaskReminder(reminder)).toList();
+    tags = getDefaultMap(map, columnTags).cast<String>();
+    checklist = getDefaultMap(map, columnCheckList, []).map((checkListItem) => new TaskCheckListItem(checkListItem)).cast<TaskCheckListItem>().toList();
+    reminders = getDefaultMap(map, columnReminders, []).map((reminder) => new TaskReminder(reminder)).cast<TaskReminder>().toList();
 
     up = getDefaultMap(map, columnUp, false);
     down = getDefaultMap(map, columnDown, false);
@@ -122,7 +123,7 @@ class Task extends BaseObject {
   }
 
   @override
-  Map<String, dynamic> toMap() {
+  LinkedHashMap toMap() {
     Map map = {
       columnId: id,
       columnUserId: userId,
@@ -171,7 +172,7 @@ class TaskProvider extends ListProvider<Task> {
       return new Task(object);
     }
   @override
-    Map<String, dynamic> mapElement(Task object) {
+    LinkedHashMap mapElement(Task object) {
       // TODO: implement mapElement
       return object.toMap();
     }

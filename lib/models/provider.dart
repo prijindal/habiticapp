@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:collection';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,7 +16,7 @@ abstract class Provider<T> {
 
   T newElement(dynamic object);
 
-  Map<String, dynamic> mapElement(T object);
+  LinkedHashMap mapElement(T object);
 
   Future<bool> close() => prefs.commit();
 
@@ -31,13 +32,13 @@ abstract class ListProvider<T> extends Provider<T> {
   Future<List<T>> getTasks() async {
     String maps = prefs.getString(table);
     if(maps == null) {return null;}
-    List<dynamic> objectList = JSON.decode(maps);
+    List<dynamic> objectList = const JsonDecoder().convert(maps);
     return objectList.map((object) => newElement(object)).toList();
   }
 
   @override
   Future<void> sync([List<T> objectList]) async {
-    prefs.setString(table, JSON.encode(objectList.map((object) => mapElement(object)).toList()));
+    prefs.setString(table, const JsonEncoder().convert(objectList.map((object) => mapElement(object)).toList()));
   }
 }
 
@@ -47,13 +48,13 @@ abstract class ObjectProvider<T> extends Provider<T> {
   Future<T> getTasks() async {
     String maps = prefs.getString(table);
     if(maps == null) {return null;}
-    dynamic object = JSON.decode(maps);
+    dynamic object = const JsonDecoder().convert(maps);
     return newElement(object);
   }
 
   @override
   Future<void> sync([dynamic object]) async {
     // T obj = (T) object;
-    prefs.setString(table, JSON.encode(mapElement(object as T)));
+    prefs.setString(table, const JsonEncoder().convert(mapElement(object as T)));
   }
 }

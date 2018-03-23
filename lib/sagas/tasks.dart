@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:uuid/uuid.dart';
 
 import '../api/tasks.dart';
@@ -36,15 +37,18 @@ getNetworkTasks() async {
 
 onNewTask(String text, String type) async {
   var loginInformation = await getLoginInformation();
-  Task task = new Task({
+  Task task = new Task(LinkedHashMap.from({
     'type': type,
     'id': uuid.v1(),
     'text': text,
-  });
+  }));
   tasksstore.dispatch(TaskAction.addTask(task));
   tasksstore.dispatch(TaskAction.startLoading());
   try {
-    Task addedTask = await addNewTask(new Task({'text': text, 'type': type}), loginInformation);
+    Task addedTask = await addNewTask(
+      new Task(LinkedHashMap.from({'text': text, 'type': type})),
+      loginInformation
+    );
     int foundTaskIndex = tasksstore.state.tasks.lastIndexWhere((Task checkingTask) {
       return checkingTask.id == task.id;
     });

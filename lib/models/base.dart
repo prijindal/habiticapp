@@ -1,5 +1,7 @@
+import 'dart:collection';
+
 abstract class BaseObject {
-  dynamic getDefaultMap(Map<String, dynamic> map, String column, [dynamic defaultValue]) {
+  dynamic getDefaultMap(LinkedHashMap map, String column, [dynamic defaultValue]) {
     if(map.containsKey(column)) {
       return map[column];
     } else {
@@ -7,7 +9,7 @@ abstract class BaseObject {
     }
   }
 
-  dynamic checkNullAndAdd(Map<String, dynamic> map, String key, dynamic value) {
+  dynamic checkNullAndAdd(LinkedHashMap map, String key, dynamic value) {
     if (value != null) {
       map[key] = value;
     }
@@ -21,6 +23,6 @@ abstract class BaseObject {
   toJson() {
     return toMap();
   }
-  BaseObject(Map<String, dynamic> map);
-  Map<String, dynamic> toMap();
+  BaseObject(LinkedHashMap map);
+  LinkedHashMap toMap();
 }

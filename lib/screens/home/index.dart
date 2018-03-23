@@ -8,6 +8,7 @@ import 'taskinput.dart';
 import 'body.dart';
 
 import '../../models/task.dart';
+import '../../models/user.dart';
 
 import '../../store.dart';
 
@@ -44,6 +45,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   
   bool _enableAddTask = false;
   List<Task> tasks;
+  User user;
   bool isLoading = false;
   TabController _tabController;
 
@@ -60,6 +62,13 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
           isLoading = state.isLoading;
         });
       }
+    });
+    userstore.onChange.listen((state) {
+       if(mounted) {
+         setState(() {
+            user = state.user;
+         });
+       }
     });
     getOfflineTasks();
     getNetworkTasks();
@@ -79,10 +88,34 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   }
 
   List<Task> getTasks(String type) {
-    if(tasks == null) {
+    if(tasks == null || user == null) {
       return [];
+    }    
+    List<String> tasksId;
+    if(type == "habit") {
+      tasksId = user.tasksOrder.habits;
+    } else if(type == "daily") {
+      tasksId = user.tasksOrder.dailys;
+    } else if(type == "todo") {
+      tasksId = user.tasksOrder.todos;
+    } else {
+      tasksId = user.tasksOrder.rewards;      
     }
-    return tasks.where((task) => task.type == type).toList();
+    
+    List<Task> selectedTasks = tasks.where((task) => task.type == type).toList();
+
+    Map<String, Task> mappedTasks = {};
+    for(var i = 0;i < selectedTasks.length;i+=1) {
+      mappedTasks[selectedTasks[i].id] = selectedTasks[i];
+    }
+
+    List<Task> sortedTasks = [];
+    for(var i = 0; i < tasksId.length; i+=1) {
+      if (mappedTasks.containsKey(tasksId[i])) {
+        sortedTasks.add(mappedTasks[tasksId[i]]);
+      }
+    }
+    return sortedTasks;
   }
 
   @override

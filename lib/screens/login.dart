@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
   @required
   final ValueChanged<LoginResponse> onLoggedIn;
 
-  _onGenerateRoute(RouteSettings route) {
+  MaterialPageRoute _onGenerateRoute(RouteSettings route) {
     if(route.name == "/") {
       return new MaterialPageRoute(
         builder: (context) => new LoginPage(onLoggedIn: onLoggedIn)

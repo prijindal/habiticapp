@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../helpers/theme.dart';
 
 class LoadingScreen extends StatelessWidget {
-  _onGenerateRoute(RouteSettings route) {
+  MaterialPageRoute _onGenerateRoute(RouteSettings route) {
     if(route.name == "/") {
       return new MaterialPageRoute(
         builder: (context) => new Scaffold(

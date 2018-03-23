@@ -1,33 +1,36 @@
+import 'dart:collection';
 import 'base.dart';
 import 'provider.dart';
 import 'tag.dart';
 
 class Local extends BaseObject{
   String email;
-  Local(Map<String,dynamic> map):super(map) {
+  Local(LinkedHashMap map):super(map) {
     email = getDefaultMap(map, "email");
   }
 
   @override
-    Map<String, dynamic> toMap() {
-      return {
+    LinkedHashMap toMap() {
+      Map map = {
         "email": email
       };
+      return map;
     }
 }
 
 class UserAuth extends BaseObject{
   Local local;
-  UserAuth(Map<String, dynamic> map):super(map) {
+  UserAuth(LinkedHashMap map):super(map) {
     local = new Local(getDefaultMap(map, "local"));
   }
 
   @override
-    Map<String, dynamic> toMap() {
+    LinkedHashMap toMap() {
       // TODO: implement toMap
-      return {
+      Map map = {
         "local": local.toMap()
       };
+      return map;
     }
 }
 
@@ -35,18 +38,42 @@ class UserProfile extends BaseObject {
   String name;
   String imageUrl;
 
-  UserProfile(Map<String, dynamic> map):super(map) {
+  UserProfile(LinkedHashMap map):super(map) {
     name = getDefaultMap(map, "name");
     imageUrl = getDefaultMap(map, "imageUrl");
   }
   @override
-    Map<String, dynamic> toMap() {
+    LinkedHashMap toMap() {
       // TODO: implement toMap
-      return {
+      Map map = {
         "name": name,
         "imageUrl": imageUrl
       };
+      return map;
     }
+}
+
+class TasksOrder extends BaseObject {
+  List<String> habits;
+  List<String> dailys;
+  List<String> todos;
+  List<String> rewards;
+
+  TasksOrder(LinkedHashMap map):super(map) {
+    habits = getDefaultMap(map, "habits").cast<String>();
+    dailys = getDefaultMap(map, "dailys").cast<String>();
+    todos = getDefaultMap(map, "todos").cast<String>();
+    rewards = getDefaultMap(map, "rewards").cast<String>();
+  }
+
+  LinkedHashMap toMap() {
+    Map map = {};
+    map = checkNullAndAdd(map, "habits", habits);
+    map = checkNullAndAdd(map, "dailys", dailys);
+    map = checkNullAndAdd(map, "todos", todos);
+    map = checkNullAndAdd(map, "rewards", rewards);
+    return map;
+  }
 }
 
 class User extends BaseObject{
@@ -54,16 +81,18 @@ class User extends BaseObject{
   UserProfile profile;
   String id;
   List<Tag> tags;
+  TasksOrder tasksOrder;
 
-  User(Map<String,dynamic> map):super(map) {
+  User(LinkedHashMap map):super(map) {
     auth = new UserAuth(getDefaultMap(map, "auth"));
     profile = new UserProfile(getDefaultMap(map, "profile"));
+    tasksOrder = new TasksOrder(getDefaultMap(map, "tasksOrder"));    
     id = getDefaultMap(map, "id");
-    tags = getDefaultMap(map, "tags").map((tag) => new Tag(tag)).toList();
+    tags = getDefaultMap(map, "tags").map((tag) => new Tag(tag)).cast<Tag>().toList();
   }
 
   @override
-    Map<String, dynamic> toMap() {
+    LinkedHashMap toMap() {
       Map map = {
         "auth": auth.toMap(),
         "profile": profile.toMap(),
@@ -84,7 +113,7 @@ class UserProvider extends ObjectProvider<User> {
       return new User(object);
     }
   @override
-    Map<String, dynamic> mapElement(User object) {
+    LinkedHashMap mapElement(User object) {
       // TODO: implement mapElement
       return object.toMap();
     }
