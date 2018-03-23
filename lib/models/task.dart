@@ -110,7 +110,7 @@ class Task extends BaseObject {
 
     notes = getDefaultMap(map, columnnotes);
     difficulty = priorityToDiff(getDefaultMap(map, columnPriority));
-    tags = getDefaultMap(map, columnTags).cast<String>();
+    tags = getDefaultMap(map, columnTags, []).cast<String>();
     checklist = getDefaultMap(map, columnCheckList, []).map((checkListItem) => new TaskCheckListItem(checkListItem)).cast<TaskCheckListItem>().toList();
     reminders = getDefaultMap(map, columnReminders, []).map((reminder) => new TaskReminder(reminder)).cast<TaskReminder>().toList();
 

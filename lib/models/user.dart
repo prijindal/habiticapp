@@ -60,10 +60,10 @@ class TasksOrder extends BaseObject {
   List<String> rewards;
 
   TasksOrder(LinkedHashMap map):super(map) {
-    habits = getDefaultMap(map, "habits").cast<String>();
-    dailys = getDefaultMap(map, "dailys").cast<String>();
-    todos = getDefaultMap(map, "todos").cast<String>();
-    rewards = getDefaultMap(map, "rewards").cast<String>();
+    habits = getDefaultMap(map, "habits", []).cast<String>();
+    dailys = getDefaultMap(map, "dailys", []).cast<String>();
+    todos = getDefaultMap(map, "todos", []).cast<String>();
+    rewards = getDefaultMap(map, "rewards", []).cast<String>();
   }
 
   LinkedHashMap toMap() {
@@ -86,9 +86,9 @@ class User extends BaseObject{
   User(LinkedHashMap map):super(map) {
     auth = new UserAuth(getDefaultMap(map, "auth"));
     profile = new UserProfile(getDefaultMap(map, "profile"));
-    tasksOrder = new TasksOrder(getDefaultMap(map, "tasksOrder"));    
+    tasksOrder = new TasksOrder(getDefaultMap(map, "tasksOrder", {}));
     id = getDefaultMap(map, "id");
-    tags = getDefaultMap(map, "tags").map((tag) => new Tag(tag)).cast<Tag>().toList();
+    tags = getDefaultMap(map, "tags", []).map((tag) => new Tag(tag)).cast<Tag>().toList();
   }
 
   @override

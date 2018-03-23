@@ -22,7 +22,7 @@ abstract class Provider<T> {
 
   Future<dynamic> getTasks();
 
-  Future<void> sync([List<T> a]);
+  Future<void> sync([dynamic a]);
 }
 
 abstract class ListProvider<T> extends Provider<T> {
@@ -37,7 +37,7 @@ abstract class ListProvider<T> extends Provider<T> {
   }
 
   @override
-  Future<void> sync([List<T> objectList]) async {
+  Future<void> sync([dynamic objectList]) async {
     prefs.setString(table, const JsonEncoder().convert(objectList.map((object) => mapElement(object)).toList()));
   }
 }

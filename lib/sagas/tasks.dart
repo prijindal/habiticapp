@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'package:uuid/uuid.dart';
 
@@ -9,6 +10,7 @@ import '../actions/tasks.dart';
 import '../store.dart';
 
 import 'base.dart';
+import 'user.dart';
 
 final _taskProvider = new TaskProvider(table: "tasks");
 final uuid = new Uuid();
@@ -19,7 +21,7 @@ getOfflineTasks() async {
 }
 
 
-getNetworkTasks() async {
+Future<Null> getNetworkTasks() async {
   try {
     tasksstore.dispatch(TaskAction.startLoading());
     var loginInformation = await getLoginInformation();
@@ -30,6 +32,7 @@ getNetworkTasks() async {
     tasksstore.dispatch(TaskAction.populateTasks(data));
     tasksstore.dispatch(TaskAction.stopLoading());
     syncTasks(data);
+    getNetworkUser();
   } catch(e) {
     print(e);
   }
@@ -44,6 +47,7 @@ onNewTask(String text, String type) async {
   }));
   tasksstore.dispatch(TaskAction.addTask(task));
   tasksstore.dispatch(TaskAction.startLoading());
+  userstore.state.user.tasksOrder.habits.insert(0, task.id);
   try {
     Task addedTask = await addNewTask(
       new Task(LinkedHashMap.from({'text': text, 'type': type})),
@@ -52,6 +56,7 @@ onNewTask(String text, String type) async {
     int foundTaskIndex = tasksstore.state.tasks.lastIndexWhere((Task checkingTask) {
       return checkingTask.id == task.id;
     });
+    userstore.state.user.tasksOrder.habits[userstore.state.user.tasksOrder.habits.indexOf(task.id)] = addedTask.id;
     tasksstore.dispatch(TaskAction.replaceTask(foundTaskIndex, addedTask));
     tasksstore.dispatch(TaskAction.stopLoading());
     syncTasks(tasksstore.state.tasks);
