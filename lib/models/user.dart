@@ -96,6 +96,7 @@ class User extends BaseObject{
       Map map = {
         "auth": auth.toMap(),
         "profile": profile.toMap(),
+        "tasksOrder": tasksOrder.toMap(),
         "id": id,
         "tags": tags.map((tag) => tag.toMap()).toList()
       };

@@ -55,6 +55,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     _tabController = new TabController(vsync: this, length: choices.length);
     tasks = tasksstore.state.tasks;
     isLoading = tasksstore.state.isLoading;
+    user = userstore.state.user;
     tasksstore.onChange.listen((state) {
       if(mounted) {
         setState(() {
@@ -64,11 +65,11 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
       }
     });
     userstore.onChange.listen((state) {
-       if(mounted) {
-         setState(() {
-            user = state.user;
-         });
-       }
+      if(mounted) {
+        setState(() {
+          user = state.user;
+        });
+      }
     });
     getOfflineTasks();
     getNetworkTasks();

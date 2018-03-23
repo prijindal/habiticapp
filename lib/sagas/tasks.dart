@@ -32,7 +32,6 @@ Future<Null> getNetworkTasks() async {
     tasksstore.dispatch(TaskAction.populateTasks(data));
     tasksstore.dispatch(TaskAction.stopLoading());
     syncTasks(data);
-    getNetworkUser();
   } catch(e) {
     print(e);
   }
