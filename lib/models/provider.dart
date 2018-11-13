@@ -18,36 +18,41 @@ abstract class Provider<T> {
 
   LinkedHashMap mapElement(T object);
 
-  Future<bool> close() => prefs.commit();
-
   Future<dynamic> getTasks();
 
   Future<void> sync([dynamic a]);
 }
 
 abstract class ListProvider<T> extends Provider<T> {
-  ListProvider({String table}):super(table:table);
+  ListProvider({String table}) : super(table: table);
 
   @override
   Future<List<T>> getTasks() async {
     String maps = prefs.getString(table);
-    if(maps == null) {return null;}
+    if (maps == null) {
+      return null;
+    }
     List<dynamic> objectList = const JsonDecoder().convert(maps);
     return objectList.map((object) => newElement(object)).toList();
   }
 
   @override
   Future<void> sync([dynamic objectList]) async {
-    prefs.setString(table, const JsonEncoder().convert(objectList.map((object) => mapElement(object)).toList()));
+    prefs.setString(
+        table,
+        const JsonEncoder()
+            .convert(objectList.map((object) => mapElement(object)).toList()));
   }
 }
 
 abstract class ObjectProvider<T> extends Provider<T> {
-  ObjectProvider({String table}):super(table:table);
+  ObjectProvider({String table}) : super(table: table);
   @override
   Future<T> getTasks() async {
     String maps = prefs.getString(table);
-    if(maps == null) {return null;}
+    if (maps == null) {
+      return null;
+    }
     dynamic object = const JsonDecoder().convert(maps);
     return newElement(object);
   }
@@ -55,6 +60,7 @@ abstract class ObjectProvider<T> extends Provider<T> {
   @override
   Future<void> sync([dynamic object]) async {
     // T obj = (T) object;
-    prefs.setString(table, const JsonEncoder().convert(mapElement(object as T)));
+    prefs.setString(
+        table, const JsonEncoder().convert(mapElement(object as T)));
   }
 }

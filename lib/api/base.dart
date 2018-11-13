@@ -11,7 +11,11 @@ const String API_PATH = "/api/v3";
 const String API_URL = HOST + API_PATH;
 
 Uri uriBuilder(String url, [Map<String, dynamic> query]) {
-  return new Uri(host: HOST, path: API_PATH + url, queryParameters: query, scheme: "https");
+  return new Uri(
+      host: HOST,
+      path: API_PATH + url,
+      queryParameters: query,
+      scheme: "https");
 }
 
 loginPost(String url, Map<String, dynamic> body, [String apiToken]) async {
@@ -25,14 +29,15 @@ loginPost(String url, Map<String, dynamic> body, [String apiToken]) async {
 
 Map<String, String> getHeaders([LoginResponse loginInformation]) {
   Map<String, String> headers = {};
-  if(loginInformation != null) {
+  if (loginInformation != null) {
     headers['x-api-key'] = loginInformation.apiToken;
     headers['x-api-user'] = loginInformation.id;
   }
   return headers;
 }
 
-Future<Map<String, dynamic>> get(String url, [Map<String,String> query, LoginResponse loginInformation]) async {
+Future<Map<String, dynamic>> get(String url,
+    [Map<String, String> query, LoginResponse loginInformation]) async {
   print(url);
   var httpClient = new http.Client();
   var headers = getHeaders(loginInformation);
@@ -44,10 +49,12 @@ Future<Map<String, dynamic>> get(String url, [Map<String,String> query, LoginRes
   return await postProcess(responseStream);
 }
 
-Future<Map<String, dynamic>> dataRequest(String url, String method, LinkedHashMap body, [Map<String,String> query, LoginResponse loginInformation]) async {
+Future<Map<String, dynamic>> dataRequest(
+    String url, String method, LinkedHashMap body,
+    [Map<String, String> query, LoginResponse loginInformation]) async {
   var httpClient = new http.Client();
   var headers = getHeaders(loginInformation);
-  headers['content-type'] = "application/json";  
+  headers['content-type'] = "application/json";
   Uri uri = uriBuilder(url, query);
   http.Request request = new http.Request(method, uri);
   request.body = const JsonEncoder().convert(body.cast<String, dynamic>());
@@ -56,23 +63,22 @@ Future<Map<String, dynamic>> dataRequest(String url, String method, LinkedHashMa
   return await postProcess(responseStream);
 }
 
-Future<Map<String, dynamic>> post(String url, LinkedHashMap body, [Map<String,String> query, LoginResponse loginInformation]) async {
+Future<Map<String, dynamic>> post(String url, LinkedHashMap body,
+    [Map<String, String> query, LoginResponse loginInformation]) async {
   return await dataRequest(url, "POST", body, query, loginInformation);
 }
 
-Future<Map<String, dynamic>> put(String url, LinkedHashMap body, [Map<String,String> query, LoginResponse loginInformation]) async {
+Future<Map<String, dynamic>> put(String url, LinkedHashMap body,
+    [Map<String, String> query, LoginResponse loginInformation]) async {
   return await dataRequest(url, "PUT", body, query, loginInformation);
 }
-
 
 postProcess(http.StreamedResponse responseStream) async {
   String response = await responseStream.stream.bytesToString();
   var responseJson = const JsonDecoder().convert(response);
-  if (
-    responseStream.statusCode == HttpStatus.ACCEPTED ||
-    responseStream.statusCode == HttpStatus.CREATED || 
-    responseStream.statusCode == HttpStatus.OK
-  ) {
+  if (responseStream.statusCode == HttpStatus.accepted ||
+      responseStream.statusCode == HttpStatus.created ||
+      responseStream.statusCode == HttpStatus.ok) {
     return responseJson;
   } else {
     throw new Exception(responseJson);
