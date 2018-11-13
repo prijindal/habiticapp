@@ -31,7 +31,7 @@ before_script:
 - gem install coveralls-lcov
 script:
 - ulimit -S -n 2048
-- "./flutter/bin/flutter analyze lib/ test/"
+- "./flutter/bin/flutter analyze --no-current-package lib/ test/"
 - "./flutter/bin/flutter test --coverage"
 after_success:
 - coveralls-lcov coverage/lcov.info
